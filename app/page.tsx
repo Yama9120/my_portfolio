@@ -1,5 +1,9 @@
-import React from "react"
+import Projects from './components/sections/projects';
 
 export default function Page() {
-  return <h1>Hello World</h1>
+  return (
+    <main>
+      <Projects />
+    </main>
+  );
 }
