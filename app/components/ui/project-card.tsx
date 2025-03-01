@@ -1,3 +1,5 @@
+'use client';
+
 import { Card, CardContent, CardMedia, Typography, Chip, Stack } from '@mui/material';
 import type { Project } from '@/app/lib/data/projects';
 
