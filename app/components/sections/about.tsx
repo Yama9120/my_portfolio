@@ -9,7 +9,7 @@ export default function About() {
         title="About Me"
         sectionid="about"
         align="left"
-        color="#2196f3"
+        color="#4caf50"
         textcolor='white'
     >
         <Box sx={{ p: 4 }}>

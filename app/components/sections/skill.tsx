@@ -9,7 +9,7 @@ export default function Skills() {
             title="Skills"
             sectionid="skills"
             align="left"
-            color="#4caf50"
+            color="#ff9800"
             textcolor="white"
           >
             <Box sx={{ p: 4 }}>
