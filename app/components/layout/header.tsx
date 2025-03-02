@@ -15,9 +15,10 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 
 const navItems = [
-  { name: 'About Me', href: '#about' },
-  { name: 'Projects', href: '#projects' },
-  { name: 'Skills', href: '#skills' }
+    { name: 'Home', href: '#' },
+    { name: 'About Me', href: '#about' },
+    { name: 'Projects', href: '#projects' },
+    { name: 'Skills', href: '#skills' }
 ];
 
 export default function Header() {
