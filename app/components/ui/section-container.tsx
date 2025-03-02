@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Typography, Container } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 interface SectionContainerProps {
   title: string;
@@ -13,46 +13,42 @@ export default function SectionContainer({ title, align, children }: SectionCont
     <Box
       component="section"
       sx={{
-        width: '100%',
+        width: 'calc(100% - 48px)',
         position: 'relative',
         mb: 8,
+        mt: 15, // タイトルのためのスペースを確保
+        mx: 'auto',
+        maxWidth: '1200px',
       }}
     >
-      {/* タイトルを含むヘッダー部分 */}
+      {/* タイトル部分 - コンテンツの上部に配置 */}
       <Box
         sx={{
           position: 'absolute',
-          top: 0,
-          [align]: 0,
-          backgroundColor: 'primary.main',
-          color: 'white',
-          px: 4,
-          py: 2,
-          borderTopLeftRadius: align === 'right' ? 4 : 0,
-          borderTopRightRadius: align === 'left' ? 4 : 0,
-          zIndex: 1,
+          top: -57, // コンテンツボックスより上に配置
+          [align]: 0, // 左右の配置
+          backgroundColor: 'white',
+          px: 3,
+          py: 1.5,
+          border: '1px solid #e0e0e0',
+          zIndex: 2,
         }}
       >
-        <Typography variant="h4" component="h2">
+        <Typography variant="h6" component="h2">
           {title}
         </Typography>
       </Box>
 
-      {/* メインコンテンツ部分 */}
-      <Container
-        maxWidth="lg"
+      {/* メインコンテンツボックス */}
+      <Box
         sx={{
-          backgroundColor: 'background.paper',
-          borderRadius: 2,
-          pt: 8,
-          pb: 4,
-          px: 4,
-          boxShadow: 3,
-          mt: 4,
+          backgroundColor: 'white',
+          width: '100%',
+          border: '1px solid #e0e0e0',
         }}
       >
         {children}
-      </Container>
+      </Box>
     </Box>
   );
 }
