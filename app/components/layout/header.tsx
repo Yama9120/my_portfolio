@@ -27,11 +27,13 @@ const navItems = [
 ];
 
 const NAV_HEIGHT = 80; // ナビゲーションバーの高さ
+const MOBILE_BREAKPOINT = 660; // モバイル表示の閾値
 
 export default function Header() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isFixed, setIsFixed] = useState(false);
     const [activeSection, setActiveSection] = useState('');
+    const [hamburgerOpacity, setHamburgerOpacity] = useState(1);
 
     const scrollToSection = (href: string) => {
         if (href === '#hero') {
@@ -62,7 +64,15 @@ export default function Header() {
     
             // 固定位置の設定
             setIsFixed(scrollPosition > heroHeight - offset);
-    
+
+            // モバイル時のハンバーガーメニューの透明度制御
+            if (window.innerWidth <= MOBILE_BREAKPOINT) {
+                const opacity = Math.max(0, 1 - (scrollPosition / 200));
+                setHamburgerOpacity(opacity);
+            } else {
+                setHamburgerOpacity(1);
+            }
+            
             // アクティブセクションの検出
             const sections = navItems.map(item => ({
                 id: item.href.slice(1),
@@ -92,13 +102,22 @@ export default function Header() {
             }
         };
     
-        // スクロールイベントリスナーの設定
+        const handleResize = () => {
+            if (window.innerWidth > MOBILE_BREAKPOINT) {
+                setHamburgerOpacity(1);
+            } else {
+                handleScroll();
+            }
+        };
+
         window.addEventListener('scroll', handleScroll);
-        // 初期状態の設定
+        window.addEventListener('resize', handleResize);
         handleScroll();
-    
-        // クリーンアップ
-        return () => window.removeEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+            window.removeEventListener('resize', handleResize);
+        };
     }, []);
 
     return (
@@ -109,8 +128,10 @@ export default function Header() {
                 sx={{ 
                     bgcolor: 'transparent',
                     boxShadow: 'none',
-                    zIndex: 2000, // より高いz-indexに設定
-                    pointerEvents: 'none', // AppBar自体はポインターイベントを無効化
+                    zIndex: 2000,
+                    pointerEvents: 'none',
+                    opacity: hamburgerOpacity,
+                    transition: 'opacity 0.3s ease',
                 }}
             >
                 <Toolbar 
@@ -125,7 +146,7 @@ export default function Header() {
                         onClick={() => setIsDrawerOpen(true)}
                         sx={{ 
                             color: 'grey.800',
-                            pointerEvents: 'auto', // ボタンのみポインターイベントを有効化
+                            pointerEvents: 'auto',
                             position: 'relative',
                         }}
                     >
@@ -133,7 +154,7 @@ export default function Header() {
                     </IconButton>
                 </Toolbar>
             </AppBar>
-
+            
             {/* サイドドロワー */}
             <Drawer
                 anchor="right"
