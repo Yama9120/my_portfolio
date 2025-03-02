@@ -21,35 +21,78 @@ const navItems = [
     { name: 'Skills', href: '#skills' }
 ];
 
+const NAV_HEIGHT = 80; // ナビゲーションバーの高さ
+
 export default function Header() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isFixed, setIsFixed] = useState(false);
     const [activeSection, setActiveSection] = useState('');
 
+    const scrollToSection = (href: string) => {
+        if (href === '#hero') {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        } else {
+            const element = document.querySelector(href);
+            if (element) {
+                const elementPosition = element.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - NAV_HEIGHT;
+                
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+    };
+
     // スクロール処理
     useEffect(() => {
         const handleScroll = () => {
-        const heroHeight = window.innerHeight;
-        const scrollPosition = window.scrollY;
-
-        setIsFixed(scrollPosition > heroHeight - 100);
-
-        // アクティブセクションの検出
-        const sections = navItems.map(item => item.href.slice(1));
-        sections.forEach(section => {
-            if (section) {
-            const element = document.getElementById(section);
-            if (element) {
-                const rect = element.getBoundingClientRect();
-                if (rect.top <= 100 && rect.bottom >= 100) {
-                setActiveSection(section);
+            const heroHeight = window.innerHeight;
+            const scrollPosition = window.scrollY;
+            const offset = NAV_HEIGHT + 20; // ナビゲーションバーの高さ + 追加マージン
+    
+            // 固定位置の設定
+            setIsFixed(scrollPosition > heroHeight - offset);
+    
+            // アクティブセクションの検出
+            const sections = navItems.map(item => ({
+                id: item.href.slice(1),
+                element: document.getElementById(item.href.slice(1))
+            }));
+    
+            // Homeセクションの特別処理
+            if (scrollPosition < heroHeight / 2) {
+                setActiveSection('hero');
+                return;
+            }
+    
+            // 各セクションの位置を確認
+            let currentSection = '';
+            sections.forEach(({ id, element }) => {
+                if (element) {
+                    const rect = element.getBoundingClientRect();
+                    // 画面上部から要素のトップまでの距離がオフセット内にある場合
+                    if (rect.top <= offset && rect.bottom > offset) {
+                        currentSection = id;
+                    }
                 }
+            });
+    
+            if (currentSection) {
+                setActiveSection(currentSection);
             }
-            }
-        });
         };
-
+    
+        // スクロールイベントリスナーの設定
         window.addEventListener('scroll', handleScroll);
+        // 初期状態の設定
+        handleScroll();
+    
+        // クリーンアップ
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
@@ -164,16 +207,7 @@ export default function Header() {
                             variant="text"
                             onClick={(e) => {
                                 e.preventDefault();
-                                if (item.href === '#hero') {
-                                    // Homeの場合は画面トップへスクロール
-                                    window.scrollTo({
-                                        top: 0,
-                                        behavior: 'smooth'
-                                    });
-                                } else {
-                                    const element = document.querySelector(item.href);
-                                    element?.scrollIntoView({ behavior: 'smooth' });
-                                }
+                                scrollToSection(item.href);
                             }}
                             sx={{
                                 color: 'grey.800',
