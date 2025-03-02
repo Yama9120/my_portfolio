@@ -4,17 +4,23 @@ import { skills } from '@/app/lib/data/skills';
 import SectionContainer from '../ui/section-container';
 
 export default function Skills() {
-  return (
-    <SectionContainer title="Skills" align="left">
-      <Box sx={{ p: 4 }}>
-        <Grid container spacing={3}>
-          {skills.map((skill) => (
-            <Grid item xs={12} sm={6} key={skill.id}>
-              <SkillCard skill={skill} />
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
-    </SectionContainer>
-  );
+    return (
+        <SectionContainer
+            title="Skills"
+            sectionid="skills"
+            align="left"
+            color="#4caf50"
+            textcolor="white"
+          >
+            <Box sx={{ p: 4 }}>
+                <Grid container spacing={3}>
+                    {skills.map((skill) => (
+                        <Grid item xs={12} sm={6} key={skill.id}>
+                            <SkillCard skill={skill} />
+                        </Grid>
+                    ))}
+                </Grid>
+            </Box>
+        </SectionContainer>
+    );
 }
