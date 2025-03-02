@@ -235,9 +235,8 @@ export default function Header() {
                     </Stack>
 
                     <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                        [Your Name]<br />
+                        Ryuki<br />
                         Frontend Developer<br />
-                        Based in [Location]
                     </Typography>
 
                     <Typography variant="caption" color="text.secondary">
