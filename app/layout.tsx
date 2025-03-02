@@ -1,5 +1,6 @@
 import ThemeRegistry from './components/providers/theme-registry';
 import Footer from './components/layout/footer';
+import Header from './components/layout/header';
 import './styles/globals.css';
 
 export default function RootLayout({
@@ -11,7 +12,8 @@ export default function RootLayout({
     <html lang="ja">
       <body>
         <ThemeRegistry>
-          {children}
+          <Header />
+            {children}
           <Footer />
         </ThemeRegistry>
       </body>
