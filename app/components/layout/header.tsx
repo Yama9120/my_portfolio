@@ -6,34 +6,25 @@ import {
   Box,
   Toolbar,
   IconButton,
-  Menu,
-  MenuItem,
+  Drawer,
   Container,
   Button,
-  Stack
+  Stack,
+  Typography
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
 const navItems = [
-    { name: 'Home', href: '#' },
-    { name: 'About Me', href: '#about' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Skills', href: '#skills' }
+  { name: 'Home', href: '#' },
+  { name: 'About Me', href: '#about' },
+  { name: 'Projects', href: '#projects' },
+  { name: 'Skills', href: '#skills' }
 ];
 
 export default function Header() {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isFixed, setIsFixed] = useState(false);
-  const [isHeroSection, setIsHeroSection] = useState(true);
-
-  // メニューの開閉処理
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const [activeSection, setActiveSection] = useState('');
 
   // スクロール処理
   useEffect(() => {
@@ -42,7 +33,20 @@ export default function Header() {
       const scrollPosition = window.scrollY;
 
       setIsFixed(scrollPosition > heroHeight - 100);
-      setIsHeroSection(scrollPosition < heroHeight / 2);
+
+      // アクティブセクションの検出
+      const sections = navItems.map(item => item.href.slice(1));
+      sections.forEach(section => {
+        if (section) {
+          const element = document.getElementById(section);
+          if (element) {
+            const rect = element.getBoundingClientRect();
+            if (rect.top <= 100 && rect.bottom >= 100) {
+              setActiveSection(section);
+            }
+          }
+        }
+      });
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -64,29 +68,52 @@ export default function Header() {
             size="large"
             edge="start"
             aria-label="menu"
-            onClick={handleMenu}
+            onClick={() => setIsDrawerOpen(true)}
             sx={{ color: 'grey.800' }}
           >
             <MenuIcon />
           </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            {navItems.map((item) => (
-              <MenuItem 
-                key={item.name} 
-                onClick={handleClose}
-                component="a"
-                href={item.href}
-              >
-                {item.name}
-              </MenuItem>
-            ))}
-          </Menu>
         </Toolbar>
       </AppBar>
+
+      {/* サイドドロワー */}
+      <Drawer
+        anchor="right"
+        open={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        SlideProps={{
+          style: { width: '300px' }
+        }}
+        ModalProps={{
+          BackdropProps: {
+            sx: {
+              backgroundColor: 'rgba(0, 0, 0, 0.7)',
+            }
+          }
+        }}
+      >
+        <Box sx={{ pt: 6, px: 2 }}>
+          {navItems.map((item) => (
+            <Button
+              key={item.name}
+              href={item.href}
+              onClick={() => setIsDrawerOpen(false)}
+              fullWidth
+              sx={{
+                py: 2,
+                justifyContent: 'flex-start',
+                color: 'grey.800',
+                fontSize: '1.2rem',
+                '&:hover': {
+                  backgroundColor: 'rgba(0,0,0,0.05)',
+                }
+              }}
+            >
+              <Typography variant="h6">{item.name}</Typography>
+            </Button>
+          ))}
+        </Box>
+      </Drawer>
 
       {/* ナビゲーションボタン */}
       <Box
@@ -99,8 +126,8 @@ export default function Header() {
           transition: 'all 0.3s ease',
           zIndex: 100,
           width: '100%',
-          opacity: isHeroSection ? 1 : 0,
-          pointerEvents: isHeroSection ? 'auto' : 'none',
+          bgcolor: isFixed ? 'rgb(239, 239, 239)' : 'transparent',
+          boxShadow: isFixed ? 1 : 'none',
         }}
       >
         <Container maxWidth="lg">
@@ -108,23 +135,42 @@ export default function Header() {
             direction="row"
             spacing={2}
             justifyContent="center"
+            py={2}
           >
-            {navItems.map((item) => (
-              <Button
-                key={item.name}
-                href={item.href}
-                variant="text"
-                sx={{
-                  color: 'grey.800',
-                  fontSize: '1.1rem',
-                  '&:hover': {
-                    backgroundColor: 'rgba(0,0,0,0.1)',
-                  }
-                }}
-              >
-                {item.name}
-              </Button>
-            ))}
+            {navItems.map((item) => {
+              const isActive = activeSection === item.href.slice(1);
+              return (
+                <Button
+                  key={item.name}
+                  href={item.href}
+                  variant="text"
+                  sx={{
+                    color: 'grey.800',
+                    fontSize: isActive ? '1.2rem' : '1.1rem',
+                    fontWeight: isActive ? 'bold' : 'normal',
+                    position: 'relative',
+                    '&::before': {
+                      content: '""',
+                      position: 'absolute',
+                      top: 0,
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      width: isActive ? '100%' : '0%',
+                      height: '2px',
+                      backgroundColor: 'primary.main',
+                      transition: 'all 0.3s ease',
+                    },
+                    '&:hover::before': {
+                      width: '100%',
+                    },
+                    transform: isActive ? 'scale(1.05)' : 'scale(1)',
+                    transition: 'all 0.3s ease',
+                  }}
+                >
+                  {item.name}
+                </Button>
+              );
+            })}
           </Stack>
         </Container>
       </Box>
