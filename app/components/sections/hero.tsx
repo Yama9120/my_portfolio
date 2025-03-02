@@ -6,6 +6,7 @@ export default function Hero() {
   return (
     <Box
       component="section"
+      id="hero"
       sx={{
         backgroundColor: "grey.200",
         minHeight: "100vh",

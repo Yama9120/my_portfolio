@@ -15,7 +15,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 
 const navItems = [
-    { name: 'Home', href: '#' },
+    { name: 'Home', href: '#hero' },
     { name: 'About Me', href: '#about' },
     { name: 'Projects', href: '#projects' },
     { name: 'Skills', href: '#skills' }
@@ -138,16 +138,24 @@ export default function Header() {
                 >
                 {navItems.map((item) => {
                     const isActive = activeSection === item.href.slice(1) || 
-                                    (item.href === '#' && activeSection === '');
+                                    (item.href === '#hero' && activeSection === '');
                     return (
                     <Button
                         key={item.name}
                         href={item.href}
                         variant="text"
                         onClick={(e) => {
-                        e.preventDefault();
-                        const element = document.querySelector(item.href);
-                        element?.scrollIntoView({ behavior: 'smooth' });
+                            e.preventDefault();
+                            if (item.href === '#hero') {
+                                // Homeの場合は画面トップへスクロール
+                                window.scrollTo({
+                                    top: 0,
+                                    behavior: 'smooth'
+                                });
+                            } else {
+                                const element = document.querySelector(item.href);
+                                element?.scrollIntoView({ behavior: 'smooth' });
+                            }
                         }}
                         sx={{
                         color: 'grey.800',
