@@ -5,7 +5,12 @@ import { Typography, Box } from '@mui/material';
 
 export default function About() {
   return (
-    <SectionContainer title="About Me" align="left">
+    <SectionContainer 
+      title="About Me"
+      align="left"
+      color="#2196f3"
+      textcolor='white'
+    >
       <Box sx={{ p: 4 }}>
         <Typography variant="body1" paragraph>
           はじめまして。私は[あなたの名前]です。
