@@ -22,7 +22,6 @@ export default function SectionContainer({
     return (
         <Box
         component="section"
-        id={sectionid}
         sx={{
             width: 'calc(100% - 48px)',
             position: 'relative',
@@ -34,6 +33,7 @@ export default function SectionContainer({
         >
         {/* タイトル部分 - コンテンツの上部に配置 */}
         <Box
+            id={sectionid}
             sx={{
             position: 'absolute',
             top: -57, // コンテンツボックスより上に配置
