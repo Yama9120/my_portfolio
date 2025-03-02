@@ -1,5 +1,6 @@
 import ThemeRegistry from './components/providers/theme-registry';
 import Footer from './components/layout/footer';
+import './styles/globals.css';
 
 export default function RootLayout({
   children,
