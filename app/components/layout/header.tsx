@@ -19,15 +19,38 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import EmailIcon from '@mui/icons-material/Email';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
-const navItems = [
-    { name: 'Home', href: '#hero' },
-    { name: 'About', href: '#about' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Skills', href: '#skills' }
-];
-
 const NAV_HEIGHT = 80; // ナビゲーションバーの高さ
 const MOBILE_BREAKPOINT = 660; // モバイル表示の閾値
+
+const sectionColors = {
+    hero: '#2196f3', // 青
+    about: '#4caf50', // 緑
+    projects: '#f50057', // ピンク
+    skills: '#ff9800', // オレンジ
+};
+  
+const navItems = [
+{ 
+    name: 'Home', 
+    href: '#hero',
+    color: sectionColors.hero 
+},
+{ 
+    name: 'About', 
+    href: '#about',
+    color: sectionColors.about 
+},
+{ 
+    name: 'Projects', 
+    href: '#projects',
+    color: sectionColors.projects 
+},
+{ 
+    name: 'Skills', 
+    href: '#skills',
+    color: sectionColors.skills 
+}
+];
 
 export default function Header() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -154,7 +177,7 @@ export default function Header() {
                     </IconButton>
                 </Toolbar>
             </AppBar>
-            
+
             {/* サイドドロワー */}
             <Drawer
                 anchor="right"
@@ -288,46 +311,49 @@ export default function Header() {
                         justifyContent="center"
                         py={1} // パディングを増やす
                     >
-                    {navItems.map((item) => {
-                        const isActive = activeSection === item.href.slice(1) || 
-                                        (item.href === '#hero' && activeSection === '');
-                        return (
-                        <Button
-                            key={item.name}
-                            href={item.href}
-                            variant="text"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                scrollToSection(item.href);
-                            }}
-                            sx={{
-                                color: 'grey.800',
-                                fontSize: isActive ? '1.2rem' : '1.1rem',
-                                fontWeight: isActive ? 'bold' : 'normal',
-                                position: 'relative',
-                                padding: '8px 16px', // ボタンのパディングを追加
-                                '&::before': {
-                                    content: '""',
-                                    position: 'absolute',
-                                    top: 0,
-                                    left: '50%',
-                                    transform: 'translateX(-50%)',
-                                    width: isActive ? '100%' : '0%',
-                                    height: '2px',
-                                    backgroundColor: '#f50057', // アクティブ時の線の色を変更
-                                    transition: 'all 0.3s ease',
-                                },
-                                '&:hover::before': {
-                                    width: '100%',
-                                },
-                                transform: isActive ? 'scale(1.05)' : 'scale(1)',
-                                transition: 'transform 0.3s ease',
-                            }}
-                        >
-                            {item.name}
-                        </Button>
-                        );
-                    })}
+                        {navItems.map((item) => {
+                            const isActive = activeSection === item.href.slice(1) || 
+                                            (item.href === '#hero' && activeSection === '');
+                            return (
+                                <Button
+                                    key={item.name}
+                                    href={item.href}
+                                    variant="text"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        scrollToSection(item.href);
+                                    }}
+                                    sx={{
+                                        color: isActive ? item.color : 'grey.800',
+                                        fontSize: isActive ? '1.2rem' : '1.1rem',
+                                        fontWeight: isActive ? 'bold' : 'normal',
+                                        position: 'relative',
+                                        padding: '8px 16px',
+                                        '&::before': {
+                                            content: '""',
+                                            position: 'absolute',
+                                            top: 0,
+                                            left: '50%',
+                                            transform: 'translateX(-50%)',
+                                            width: isActive ? '100%' : '0%',
+                                            height: '2px',
+                                            backgroundColor: item.color,
+                                            transition: 'all 0.3s ease',
+                                        },
+                                        '&:hover::before': {
+                                            width: '100%',
+                                        },
+                                        '&:hover': {
+                                            color: item.color,
+                                        },
+                                        transform: isActive ? 'scale(1.05)' : 'scale(1)',
+                                        transition: 'all 0.3s ease',
+                                    }}
+                                >
+                                    {item.name}
+                                </Button>
+                            );
+                        })}
                     </Stack>
                 </Container>
             </Box>
