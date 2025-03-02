@@ -16,7 +16,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 
 const navItems = [
     { name: 'Home', href: '#hero' },
-    { name: 'About Me', href: '#about' },
+    { name: 'About', href: '#about' },
     { name: 'Projects', href: '#projects' },
     { name: 'Skills', href: '#skills' }
 ];
