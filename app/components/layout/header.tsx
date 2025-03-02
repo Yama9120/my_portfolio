@@ -10,9 +10,14 @@ import {
     Container,
     Button,
     Stack,
-    Typography
+    Typography,
+    Link, 
+    Divider 
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import EmailIcon from '@mui/icons-material/Email';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 const navItems = [
     { name: 'Home', href: '#hero' },
@@ -98,7 +103,7 @@ export default function Header() {
 
     return (
         <>
-            {/* ハンバーガーメニュー - z-indexとpointer-eventsの調整のみ */}
+            {/* ハンバーガーメニュー */}
             <AppBar 
                 position="fixed" 
                 sx={{ 
@@ -141,37 +146,103 @@ export default function Header() {
                     BackdropProps: {
                         sx: {
                             backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                            zIndex: 1400, // ハンバーガーメニューより低く、ナビゲーションより高い
+                            zIndex: 1900, // ハンバーガーメニューより低く設定
                         }
-                    }
+                    },
                 }}
                 sx={{
-                    zIndex: 2100, // ドロワー本体は最前面のまま
+                    zIndex: 2100, // Drawer全体のz-index
                     '& .MuiDrawer-paper': {
-                        zIndex: 2100, // ドロワーのペーパー要素も最前面に
+                        width: '300px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                        zIndex: 2100, // Drawer本体も同じz-index
                     }
                 }}
             >
-                <Box sx={{ pt: 6, px: 2 }}>
-                {navItems.map((item) => (
-                    <Button
-                        key={item.name}
-                        href={item.href}
-                        onClick={() => setIsDrawerOpen(false)}
-                        fullWidth
-                        sx={{
-                            py: 2,
-                            justifyContent: 'flex-start',
-                            color: 'grey.800',
-                            fontSize: '1.2rem',
-                            '&:hover': {
-                                backgroundColor: 'rgba(0,0,0,0.05)',
-                            }
-                        }}
-                    >
-                        <Typography variant="h6">{item.name}</Typography>
-                    </Button>
-                ))}
+                {/* メインメニュー */}
+                <Box sx={{ p: 3 }}>
+                    {navItems.map((item) => (
+                        <Button
+                            key={item.name}
+                            fullWidth
+                            onClick={() => {
+                                scrollToSection(item.href);
+                                setIsDrawerOpen(false);
+                            }}
+                            sx={{
+                                py: 2,
+                                justifyContent: 'flex-start',
+                                color: 'grey.800',
+                                fontSize: '1.2rem',
+                            }}
+                        >
+                            {item.name}
+                        </Button>
+                    ))}
+                </Box>
+
+                {/* 連絡先情報 */}
+                <Box sx={{ p: 3, bgcolor: 'grey.50' }}>
+                    <Divider sx={{ mb: 3 }} />
+                    
+                    <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold' }}>
+                        Contact
+                    </Typography>
+                    
+                    <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
+                        <IconButton
+                            component={Link}
+                            href="https://github.com/yourusername"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="GitHub"
+                            sx={{ 
+                                '&:hover': {
+                                    color: 'primary.main'
+                                }
+                            }}
+                        >
+                            <GitHubIcon />
+                        </IconButton>
+                        <IconButton
+                            component={Link}
+                            href="mailto:your.email@example.com"
+                            aria-label="Email"
+                            sx={{ 
+                                '&:hover': {
+                                    color: 'primary.main'
+                                }
+                            }}
+                        >
+                            <EmailIcon />
+                        </IconButton>
+                        <IconButton
+                            component={Link}
+                            href="https://linkedin.com/in/yourusername"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label="LinkedIn"
+                            sx={{ 
+                                '&:hover': {
+                                    color: 'primary.main'
+                                }
+                            }}
+                        >
+                            <LinkedInIcon />
+                        </IconButton>
+                    </Stack>
+
+                    <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                        [Your Name]<br />
+                        Frontend Developer<br />
+                        Based in [Location]
+                    </Typography>
+
+                    <Typography variant="caption" color="text.secondary">
+                        © {new Date().getFullYear()} All rights reserved.
+                    </Typography>
                 </Box>
             </Drawer>
 
