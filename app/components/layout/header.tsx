@@ -27,6 +27,7 @@ const sectionColors = {
     about: '#4caf50', // 緑
     projects: '#f50057', // ピンク
     skills: '#ff9800', // オレンジ
+    default: '#666666', // デフォルトの色
 };
   
 const navItems = [
@@ -57,6 +58,7 @@ export default function Header() {
     const [isFixed, setIsFixed] = useState(false);
     const [activeSection, setActiveSection] = useState('');
     const [hamburgerOpacity, setHamburgerOpacity] = useState(1);
+    const [lastClickedSection, setLastClickedSection] = useState('');
 
     const scrollToSection = (href: string) => {
         if (href === '#hero') {
@@ -78,16 +80,44 @@ export default function Header() {
         }
     };
 
+    const handleSectionClick = (href: string) => {
+        const element = document.querySelector(href);
+        if (element) {
+            element.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+                inline: 'nearest'
+            });
+            
+            // スクロール開始後すぐに画面左下でクリックを実行
+            setTimeout(() => {
+                // 画面の左下に実際の要素を作成してクリック
+                const dummyElement = document.createElement('div');
+                dummyElement.style.position = 'fixed';
+                dummyElement.style.left = '0';
+                dummyElement.style.bottom = '0';
+                dummyElement.style.width = '1px';
+                dummyElement.style.height = '1px';
+                document.body.appendChild(dummyElement);
+    
+                // 実際のクリックイベントを発火
+                dummyElement.click();
+    
+                // クリーンアップ
+                document.body.removeChild(dummyElement);
+            }, 100);
+        }
+    };
+
     // スクロール処理
     useEffect(() => {
         const handleScroll = () => {
             const heroHeight = window.innerHeight;
             const scrollPosition = window.scrollY;
-            const offset = NAV_HEIGHT + 20; // ナビゲーションバーの高さ + 追加マージン
+            const offset = NAV_HEIGHT + 20;
     
-            // 固定位置の設定
             setIsFixed(scrollPosition > heroHeight - offset);
-
+    
             // モバイル時のハンバーガーメニューの透明度制御
             if (window.innerWidth <= MOBILE_BREAKPOINT) {
                 const opacity = Math.max(0, 1 - (scrollPosition / 200));
@@ -95,51 +125,46 @@ export default function Header() {
             } else {
                 setHamburgerOpacity(1);
             }
-            
-            // アクティブセクションの検出
+    
+            // アクティブセクションの検出を改善
+            if (scrollPosition < heroHeight / 2) {
+                setActiveSection('hero');
+                setLastClickedSection('');  // スクロールで戻ってきたら初期化
+                return;
+            }
+    
+            // 各セクションの位置を確認して最も近いセクションを特定
             const sections = navItems.map(item => ({
                 id: item.href.slice(1),
                 element: document.getElementById(item.href.slice(1))
             }));
     
-            // Homeセクションの特別処理
-            if (scrollPosition < heroHeight / 2) {
-                setActiveSection('hero');
-                return;
-            }
+            let nearestSection = '';
+            let minDistance = Infinity;
     
-            // 各セクションの位置を確認
-            let currentSection = '';
             sections.forEach(({ id, element }) => {
                 if (element) {
                     const rect = element.getBoundingClientRect();
-                    // 画面上部から要素のトップまでの距離がオフセット内にある場合
-                    if (rect.top <= offset && rect.bottom > offset) {
-                        currentSection = id;
+                    const distance = Math.abs(rect.top - offset);
+                    
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        nearestSection = id;
                     }
                 }
             });
     
-            if (currentSection) {
-                setActiveSection(currentSection);
-            }
-        };
-    
-        const handleResize = () => {
-            if (window.innerWidth > MOBILE_BREAKPOINT) {
-                setHamburgerOpacity(1);
-            } else {
-                handleScroll();
+            if (nearestSection) {
+                setActiveSection(nearestSection);
+                setLastClickedSection('');  // スクロールで新しいセクションに入ったら初期化
             }
         };
 
         window.addEventListener('scroll', handleScroll);
-        window.addEventListener('resize', handleResize);
         handleScroll();
 
         return () => {
             window.removeEventListener('scroll', handleScroll);
-            window.removeEventListener('resize', handleResize);
         };
     }, []);
 
@@ -312,23 +337,74 @@ export default function Header() {
                         py={1} // パディングを増やす
                     >
                         {navItems.map((item) => {
-                            const isActive = activeSection === item.href.slice(1) || 
-                                            (item.href === '#hero' && activeSection === '');
+                            const sectionId = item.href.slice(1);
+                            const isActive = activeSection === sectionId;
+                            
                             return (
                                 <Button
                                     key={item.name}
-                                    href={item.href}
-                                    variant="text"
+                                    component="button"
                                     onClick={(e) => {
                                         e.preventDefault();
-                                        scrollToSection(item.href);
+                                        handleSectionClick(item.href);
+                                    
+                                        // 複数回の実際のクリックとタップを実行
+                                        [100, 500].forEach(delay => {
+                                            setTimeout(() => {
+                                                // ダミー要素作成
+                                                const dummyElement = document.createElement('button');
+                                                dummyElement.style.position = 'fixed';
+                                                dummyElement.style.left = '10px';
+                                                dummyElement.style.top = '10px';
+                                                dummyElement.style.width = '1px';
+                                                dummyElement.style.height = '1px';
+                                                dummyElement.style.padding = '0';
+                                                dummyElement.style.border = 'none';
+                                                dummyElement.style.opacity = '0';
+                                                
+                                                document.body.appendChild(dummyElement);
+                                                
+                                                // クリックイベント
+                                                dummyElement.click();
+                                                
+                                                // タップイベント
+                                                const touchStartEvent = new TouchEvent('touchstart', {
+                                                    bubbles: true,
+                                                    cancelable: true,
+                                                    view: window,
+                                                    touches: [
+                                                        new Touch({
+                                                            identifier: 1,
+                                                            target: dummyElement,
+                                                            clientX: 10,
+                                                            clientY: 10,
+                                                            pageX: 10,
+                                                            pageY: 10
+                                                        })
+                                                    ]
+                                                });
+                                                
+                                                const touchEndEvent = new TouchEvent('touchend', {
+                                                    bubbles: true,
+                                                    cancelable: true,
+                                                    view: window
+                                                });
+                                                
+                                                dummyElement.dispatchEvent(touchStartEvent);
+                                                dummyElement.dispatchEvent(touchEndEvent);
+                                                
+                                                // 要素を削除
+                                                document.body.removeChild(dummyElement);
+                                            }, delay);
+                                        });
                                     }}
                                     sx={{
-                                        color: isActive ? item.color : 'grey.800',
+                                        color: isActive ? item.color : sectionColors.default,
                                         fontSize: isActive ? '1.2rem' : '1.1rem',
                                         fontWeight: isActive ? 'bold' : 'normal',
                                         position: 'relative',
                                         padding: '8px 16px',
+                                        cursor: 'pointer',
                                         '&::before': {
                                             content: '""',
                                             position: 'absolute',
@@ -337,16 +413,16 @@ export default function Header() {
                                             transform: 'translateX(-50%)',
                                             width: isActive ? '100%' : '0%',
                                             height: '2px',
-                                            backgroundColor: item.color,
+                                            backgroundColor: isActive ? item.color : 'transparent',
                                             transition: 'all 0.3s ease',
-                                        },
-                                        '&:hover::before': {
-                                            width: '100%',
                                         },
                                         '&:hover': {
                                             color: item.color,
+                                            '&::before': {
+                                                width: '100%',
+                                                backgroundColor: item.color,
+                                            },
                                         },
-                                        transform: isActive ? 'scale(1.05)' : 'scale(1)',
                                         transition: 'all 0.3s ease',
                                     }}
                                 >
