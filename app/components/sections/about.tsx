@@ -18,15 +18,22 @@ export default function About() {
                 {/* 左側: テキストコンテンツ */}
                 <Grid item xs={12} md={7}>
                     <Typography variant="body1" paragraph>
-                        はじめまして。私は[あなたの名前]です。
-                        フロントエンド開発を中心に活動しています。
+                        はじめまして。{process.env.NEXT_PUBLIC_UNIV_NAME}の{process.env.NEXT_PUBLIC_MY_NAME}です。
                     </Typography>
                     <Typography variant="body1" paragraph>
-                        Next.js、TypeScript、Material UIなどのモダンな技術スタックを使用して
-                        Webアプリケーションの開発を行っています。
+                        大学では情報学を専攻し、アルバイトでWebアプリケーションの開発に挑戦したことをきっかけに、現在では主にWebアプリケーションの開発を行っております。
+                    </Typography>
+                    <Typography variant="body1" paragraph>
+                        アルバイト先ではアプリケーションの開発の他にも、セミナーのポスターや、ノベルティ、Webサイトのデザインなども手掛けています。
+                    </Typography>
+                    <Typography variant="body1" paragraph>
+                        また、個人開発では、このポートフォリオサイトの作成や、ゲーム制作も行っています。
+                    </Typography>
+                    <Typography variant="body1" paragraph>
+                        趣味はゲーム、プログラミング、Vtuberやストリーマの配信視聴、などです。
                     </Typography>
                     <Typography variant="body1">
-                        常に新しい技術に興味を持ち、学習を続けています。
+                        常に趣味の分野に対する新しい技術に興味を持ち、手を動かしながら学習を続けています。
                     </Typography>
                 </Grid>
                 {/* 右側: 画像 */}
