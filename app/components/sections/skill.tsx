@@ -15,7 +15,7 @@ export default function Skills() {
             <Box sx={{ p: 4 }}>
                 <Grid container spacing={3}>
                     {skills.map((skill) => (
-                        <Grid item xs={12} sm={6} key={skill.id}>
+                        <Grid item xs={12} sm={6} md={4} key={skill.id}>
                             <SkillCard skill={skill} />
                         </Grid>
                     ))}
