@@ -2,7 +2,7 @@ export type Skill = {
     id: number;
     name: string;
     icon: string;  // Material-UI iconの名前またはURLパス
-    category: 'フロントエンド' | 'バックエンド' | 'ゲームエンジン' | 'デザイン' | 'その他';
+    category: 'フロントエンド' | 'バックエンド' | 'ゲームエンジン' | 'デザイン' | 'その他' | '授業で使用';
     level: number;  // 1-5
     description: string;
 };
@@ -11,7 +11,7 @@ export const skills: Skill[] = [
     {
         id: 1,
         name: "javascript",
-        icon: "/images/projects/librarin_top.png",
+        icon: "/images/skills/js.svg",
         category: "フロントエンド",
         level: 4,
         description: "コンポーネント設計を意識し、hooks を活用した効率的な開発が可能です。Material UI などの UI ライブラリの使用経験も豊富です。",
@@ -19,7 +19,7 @@ export const skills: Skill[] = [
     {
         id: 2,
         name: "TypeScript",
-        icon: "/images/skills/typescript.svg",
+        icon: "/images/skills/ts-logo-256.svg",
         category: "フロントエンド",
         level: 3,
         description: "型安全性を重視した開発を心がけ、インターフェースや型定義を活用しています。",
@@ -35,7 +35,7 @@ export const skills: Skill[] = [
     {
         id: 4,
         name: "Next.js",
-        icon: "/images/skills/nextjs.svg",
+        icon: "/images/skills/nextjs-icon-dark-background.svg",
         category: "フロントエンド",
         level: 3,
         description: "型安全性を重視した開発を心がけ、インターフェースや型定義を活用しています。",
@@ -43,7 +43,7 @@ export const skills: Skill[] = [
     {
         id: 5,
         name: "Go",
-        icon: "/images/skills/go.svg",
+        icon: "/images/skills/Go-Logo_Black.svg",
         category: "バックエンド",
         level: 3,
         description: "型安全性を重視した開発を心がけ、インターフェースや型定義を活用しています。",
@@ -51,7 +51,7 @@ export const skills: Skill[] = [
     {
         id: 6,
         name: "Pyxel (Python)",
-        icon: "/images/skills/python.svg",
+        icon: "/images/skills/python-logo-only.svg",
         category: "ゲームエンジン",
         level: 3,
         description: "型安全性を重視した開発を心がけ、インターフェースや型定義を活用しています。",
@@ -59,7 +59,7 @@ export const skills: Skill[] = [
     {
         id: 7,
         name: "Unreal Engine",
-        icon: "/images/skills/ue.svg",
+        icon: "/images/skills/UE-Icon-2023-Black.svg",
         category: "ゲームエンジン",
         level: 3,
         description: "型安全性を重視した開発を心がけ、インターフェースや型定義を活用しています。",
@@ -67,7 +67,7 @@ export const skills: Skill[] = [
     {
         id: 8,
         name: "Figma",
-        icon: "/images/skills/figma.svg",
+        icon: "/images/skills/Figma Icon (Full-color).svg",
         category: "デザイン",
         level: 3,
         description: "型安全性を重視した開発を心がけ、インターフェースや型定義を活用しています。",
@@ -75,7 +75,7 @@ export const skills: Skill[] = [
     {
         id: 9,
         name: "Illustrator",
-        icon: "/images/skills/illustrator.svg",
+        icon: "/images/skills/Ai.png",
         category: "デザイン",
         level: 3,
         description: "型安全性を重視した開発を心がけ、インターフェースや型定義を活用しています。",
@@ -83,7 +83,7 @@ export const skills: Skill[] = [
     {
         id: 10,
         name: "Photoshop",
-        icon: "/images/skills/photoshop.svg",
+        icon: "/images/skills/Ps.png",
         category: "デザイン",
         level: 3,
         description: "型安全性を重視した開発を心がけ、インターフェースや型定義を活用しています。",
@@ -91,7 +91,7 @@ export const skills: Skill[] = [
     {
         id: 11,
         name: "Clip Studio Paint",
-        icon: "/images/skills/clipstudiopaint.svg",
+        icon: "/images/skills/clipstudio.png",
         category: "デザイン",
         level: 3,
         description: "型安全性を重視した開発を心がけ、インターフェースや型定義を活用しています。",
@@ -99,7 +99,7 @@ export const skills: Skill[] = [
     {
         id: 12,
         name: "Blender",
-        icon: "/images/skills/blender.svg",
+        icon: "/images/skills/blender.png",
         category: "デザイン",
         level: 3,
         description: "型安全性を重視した開発を心がけ、インターフェースや型定義を活用しています。",
@@ -107,7 +107,7 @@ export const skills: Skill[] = [
     {
         id: 13,
         name: "Firebase",
-        icon: "/images/skills/firebase.svg",
+        icon: "/images/skills/Logomark_Full Color.svg",
         category: "その他",
         level: 3,
         description: "型安全性を重視した開発を心がけ、インターフェースや型定義を活用しています。",
@@ -115,8 +115,40 @@ export const skills: Skill[] = [
     {
         id: 14,
         name: "Docker",
-        icon: "/images/skills/docker.svg",
+        icon: "/images/skills/docker-mark-blue.svg",
         category: "その他",
+        level: 3,
+        description: "型安全性を重視した開発を心がけ、インターフェースや型定義を活用しています。",
+    },
+    {
+        id: 15,
+        name: "Nginx",
+        icon: "/images/skills/nginx_logo_icon_169915.svg",
+        category: "その他",
+        level: 3,
+        description: "型安全性を重視した開発を心がけ、インターフェースや型定義を活用しています。",
+    },
+    {
+        id: 16,
+        name: "GitHub",
+        icon: "/images/skills/github-mark.svg",
+        category: "その他",
+        level: 3,
+        description: "型安全性を重視した開発を心がけ、インターフェースや型定義を活用しています。",
+    },
+    {
+        id: 17,
+        name: "C言語",
+        icon: "/images/skills/The_C_Programming_Language_logo.svg",
+        category: "授業で使用",
+        level: 3,
+        description: "型安全性を重視した開発を心がけ、インターフェースや型定義を活用しています。",
+    },
+    {
+        id: 18,
+        name: "SQL",
+        icon: "/images/skills/41932.png",
+        category: "授業で使用",
         level: 3,
         description: "型安全性を重視した開発を心がけ、インターフェースや型定義を活用しています。",
     }
