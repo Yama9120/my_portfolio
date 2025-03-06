@@ -14,11 +14,28 @@ export default function SkillCard({ skill }: SkillCardProps) {
     <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
       <CardContent>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-          <Avatar
-            src={skill.icon}
-            alt={skill.name}
-            sx={{ width: 40, height: 40, mr: 2 }}
-          />
+        <Avatar
+          src={skill.icon}
+          alt={skill.name}
+          sx={{ 
+            width: 40, 
+            height: 40, 
+            mr: 2,
+            borderRadius: '8px',
+            '& img': {  // Avatarの中の画像要素のスタイリング
+              objectFit: 'contain',  // アスペクト比を保持しながら収める
+              width: '60px',         // 実際の表示サイズを指定
+              height: '60px',
+            }
+          }}
+          variant="square"
+          imgProps={{
+            style: {
+              maxWidth: '100%',
+              maxHeight: '100%'
+            }
+          }}
+        />
           <Box>
             <Typography variant="h6" gutterBottom sx={{ mb: 0 }}>
               {skill.name}
