@@ -67,7 +67,7 @@ export const skills: Skill[] = [
     {
         id: 8,
         name: "Figma",
-        icon: "/images/skills/Figma Icon (Full-color).svg",
+        icon: "/images/skills/Figma Icon (Full-color).png",
         category: "デザイン",
         level: 3,
         description: "型安全性を重視した開発を心がけ、インターフェースや型定義を活用しています。",
