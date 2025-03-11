@@ -5,6 +5,7 @@ import { Card, CardContent, Typography, Box, Chip, Avatar } from '@mui/material'
 import type { Skill } from '@/app/lib/data/skills';
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
+import { useRipple } from './ripple-effect';
 
 interface SkillCardProps {
   skill: Skill;
@@ -31,10 +32,13 @@ export default function SkillCard({ skill }: SkillCardProps) {
   const currentColorIndex = hoverCount % borderColorCycle.length;
   const borderColor = borderColorCycle[currentColorIndex];
   
+  // 波紋効果のコンテキストを使用
+  const { triggerRipple } = useRipple();
+  
   // タイマーIDを保存するためのref
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   
-  const handleMouseEnter = useCallback(() => {
+  const handleMouseEnter = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     // 前回のタイマーがあれば解除
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -42,31 +46,48 @@ export default function SkillCard({ skill }: SkillCardProps) {
     }
     
     // ホバー回数を増やす
-    setHoverCount(prev => prev + 1);
+    setHoverCount(prev => {
+      const newCount = prev + 1;
+      const newIndex = newCount % borderColorCycle.length;
+      const newColor = borderColorCycle[newIndex];
+      
+      // 最初の透明色はスキップ
+      if (newColor !== 'rgba(255, 255, 255, 0)') {
+        try {
+          // 現在のマウス位置を使って波紋を作成
+          triggerRipple(e.clientX, e.clientY, newColor);
+        } catch (error) {
+          console.error('Failed to create ripple effect:', error);
+        }
+      }
+      
+      return newCount;
+    });
     
     // 10秒後にホバー効果をリセットする設定
     timeoutRef.current = setTimeout(() => {
       setHoverCount(0);
     }, 10000); // 10秒後にリセット
-  }, []);
+  }, [triggerRipple]);
 
   return (
-    <Card sx={{ 
-      height: '100%', 
-      display: 'flex', 
-      flexDirection: 'column',
-      backgroundColor: 'white',
-      borderWidth: '3px',
-      borderStyle: 'solid',
-      borderColor: borderColor,
-      borderRadius: '8px',
-      transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.5s ease',
-      '&:hover': {
-        transform: 'scale(1.02)',
-        boxShadow: `0 8px 16px ${borderColor === 'rgba(255, 255, 255, 0)' ? 'rgba(0,0,0,0.2)' : borderColor.replace('1)', '0.3)')}`,
-      }
-    }}
-    onMouseEnter={handleMouseEnter}
+    <Card 
+      sx={{ 
+        height: '100%', 
+        display: 'flex', 
+        flexDirection: 'column',
+        backgroundColor: 'white',
+        borderWidth: '3px',
+        borderStyle: 'solid',
+        borderColor: borderColor,
+        borderRadius: '8px',
+        transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.5s ease',
+        '&:hover': {
+          transform: 'scale(1.02)',
+          boxShadow: `0 8px 16px ${borderColor === 'rgba(255, 255, 255, 0)' ? 'rgba(0,0,0,0.2)' : borderColor.replace('1)', '0.3)')}`,
+        }
+      }}
+      onMouseEnter={handleMouseEnter}
     >
       <CardContent>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>

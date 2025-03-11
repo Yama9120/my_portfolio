@@ -15,6 +15,7 @@ import {
   DialogActions 
 } from '@mui/material';
 import type { Project } from '@/app/lib/data/projects';
+import { useRipple } from './ripple-effect';
 
 interface ProjectCardProps {
   project: Project;
@@ -42,6 +43,9 @@ export default function ProjectCard({ project }: ProjectCardProps) {
   const currentColorIndex = hoverCount % borderColorCycle.length;
   const borderColor = borderColorCycle[currentColorIndex];
   
+  // 波紋効果のコンテキストを使用
+  const { triggerRipple } = useRipple();
+  
   // タイマーIDを保存するためのref
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -53,7 +57,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     setOpen(false);
   };
   
-  const handleMouseEnter = useCallback(() => {
+  const handleMouseEnter = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     // 前回のタイマーがあれば解除
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -61,13 +65,29 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     }
     
     // ホバー回数を増やす
-    setHoverCount(prev => prev + 1);
+    setHoverCount(prev => {
+      const newCount = prev + 1;
+      const newIndex = newCount % borderColorCycle.length;
+      const newColor = borderColorCycle[newIndex];
+      
+      // 最初の透明色はスキップ
+      if (newColor !== 'rgba(255, 255, 255, 0)') {
+        try {
+          // 現在のマウス位置を使って波紋を作成
+          triggerRipple(e.clientX, e.clientY, newColor);
+        } catch (error) {
+          console.error('Failed to create ripple effect:', error);
+        }
+      }
+      
+      return newCount;
+    });
     
     // 10秒後にホバー効果をリセットする設定
     timeoutRef.current = setTimeout(() => {
       setHoverCount(0);
     }, 10000); // 10秒後にリセット
-  }, []);
+  }, [triggerRipple]);
 
   return (
     <>
