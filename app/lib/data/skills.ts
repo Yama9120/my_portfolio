@@ -1,29 +1,155 @@
 export type Skill = {
     id: number;
-    category: string;
-    items: {
-      name: string;
-      level: number;  // 1-5
-      icon?: string;
-    }[];
+    name: string;
+    icon: string;  // Material-UI iconの名前またはURLパス
+    category: 'フロントエンド' | 'バックエンド' | 'ゲームエンジン' | 'デザイン' | 'その他' | '授業で使用';
+    level: number;  // 1-5
+    description: string;
 };
 
 export const skills: Skill[] = [
     {
         id: 1,
+        name: "JavaScript",
+        icon: "/images/skills/js.svg",
         category: "フロントエンド",
-        items: [
-            { name: "React", level: 4 },
-            { name: "TypeScript", level: 3 },
-            { name: "Next.js", level: 3 },
-        ]
+        level: 3,
+        description: "蔵書検索サービスの開発で初めて本格的に使用。フロントエンドからサーバーサイドまで一貫して実装し、複数APIの連携を行いました。",
     },
     {
         id: 2,
-        category: "バックエンド",
-        items: [
-            { name: "Node.js", level: 3 },
-            { name: "Python", level: 4 },
-        ]
+        name: "TypeScript",
+        icon: "/images/skills/ts-logo-256.svg",
+        category: "フロントエンド",
+        level: 3,
+        description: "混雑状況可視化サービスで使用。チーム開発において型安全性とコードの保守性を重視した実装を行いました。",
     },
+    {
+        id: 3,
+        name: "Next.js",
+        icon: "/images/skills/nextjs-icon-dark-background.svg",
+        category: "フロントエンド",
+        level: 3,
+        description: "混雑状況可視化サービスとポートフォリオサイトで使用。コンポーネントの再利用性とパフォーマンスを意識した実装を行いました。",
+    },
+    {
+        id: 4,
+        name: "Go",
+        icon: "/images/skills/Go-Logo_Black.svg",
+        category: "バックエンド",
+        level: 2,
+        description: "混雑状況可視化サービスで、新機能追加時のAPIエンドポイントの実装しながら勉強中。designを用いたAPI設計を行っています。",
+    },
+    {
+        id: 5,
+        name: "Node.js",
+        icon: "/images/skills/nodejs.svg",
+        category: "バックエンド",
+        level: 2,
+        description: "蔵書検索サービスのバックエンド開発で使用。Express.jsでAPIの統合とルーティングを実装しました。",
+    },
+    {
+        id: 6,
+        name: "Pyxel (Python)",
+        icon: "/images/skills/python-logo-only.svg",
+        category: "ゲームエンジン",
+        level: 3,
+        description: "他の開発で得た知識を活かし、ゲーム開発にも挑戦。ゲームデザインからプログラミングまで一貫して開発を行っています。",
+    },
+    {
+        id: 7,
+        name: "Unreal Engine",
+        icon: "/images/skills/UE-Icon-2023-Black.svg",
+        category: "ゲームエンジン",
+        level: 3,
+        description: "プログラミングに慣れていない人でも使いやすいBlueprintを用いて、簡単なVRゲームを作成。",
+    },
+    {
+        id: 8,
+        name: "Figma",
+        icon: "/images/skills/Figma Icon (Full-color).png",
+        category: "デザイン",
+        level: 3,
+        description: "様々なweb開発のプロトタイプ作成で使用。独学で学んだデザインスキルを活かし、UI/UXデザインを行っています。",
+    },
+    {
+        id: 9,
+        name: "Illustrator",
+        icon: "/images/skills/Ai.png",
+        category: "デザイン",
+        level: 3,
+        description: "ポスターの制作や、サービスで用いるロゴデザイン作成で使用。独学で学んだデザインスキルを活かしています。",
+    },
+    {
+        id: 10,
+        name: "Photoshop",
+        icon: "/images/skills/Ps.png",
+        category: "デザイン",
+        level: 2,
+        description: "ノベルティの作成で利用。Illustratorとの併用でデザインを行いました。",
+    },
+    {
+        id: 11,
+        name: "Clip Studio Paint",
+        icon: "/images/skills/clipstudio.png",
+        category: "デザイン",
+        level: 4,
+        description: "趣味でイラストを描く際に使用。その時の知識を活かし、webサービスのデザインにも利用しています。",
+    },
+    {
+        id: 12,
+        name: "Blender",
+        icon: "/images/skills/blender.png",
+        category: "デザイン",
+        level: 3,
+        description: "ポスター制作で3Dモデルを利用する際に使用。書籍を活用し、基本的な操作を学んでいたため、必要な機能だけ利用しました。",
+    },
+    {
+        id: 13,
+        name: "Firebase",
+        icon: "/images/skills/Logomark_Full Color.svg",
+        category: "その他",
+        level: 2,
+        description: "蔵書検索サービスで認証機能とデータベースとして使用。基本的なセキュリティ設定とデータ構造の設計を行いました。",
+    },
+    {
+        id: 14,
+        name: "Docker",
+        icon: "/images/skills/docker-mark-blue.svg",
+        category: "その他",
+        level: 2,
+        description: "蔵書検索サービスのデプロイで使用。開発環境と本番環境の一貫性を保つためのコンテナ化を実施しました。",
+    },
+    {
+        id: 15,
+        name: "Nginx",
+        icon: "/images/skills/nginx_logo_icon_169915.svg",
+        category: "その他",
+        level: 2,
+        description: "蔵書検索サービスのWebサーバーとして使用。リバースプロキシの設定やSSL証明書の設定を行いました。",
+    },
+    {
+        id: 16,
+        name: "GitHub",
+        icon: "/images/skills/github-mark.svg",
+        category: "その他",
+        level: 3,
+        description: "個人開発とチーム開発の両方で使用。コードのバージョン管理、PR、issue管理などの基本的な機能を活用しています。",
+    },
+    {
+        id: 17,
+        name: "C言語",
+        icon: "/images/skills/The_C_Programming_Language_logo.svg",
+        category: "授業で使用",
+        level: 2,
+        description: "自身のプロジェクトで使用したことはないものの、アルゴリズムやデータ構造の授業で学習し、基本的プログラミングの知識を身につけました。",
+    },
+    {
+        id: 18,
+        name: "SQL",
+        icon: "/images/skills/41932.png",
+        category: "授業で使用",
+        level: 2,
+        description: "混雑状況可視化サービスのデータ取得処理で使用。最近は授業での知識を活かし、基本的なクエリの作成やテーブル設計を行っています。",
+    }
 ];
