@@ -33,7 +33,16 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
   return (
     <>
-      <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Card sx={{ 
+        height: '100%', 
+        display: 'flex', 
+        flexDirection: 'column',
+        transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+        '&:hover': {
+          transform: 'scale(1.02)',
+          boxShadow: '0 8px 16px rgba(0,0,0,0.2)',
+        }
+      }}>
         <CardMedia
           component="img"
           height="200"
