@@ -35,7 +35,7 @@ export default function Hero() {
     xs: 300,  // モバイル
     sm: 400,  // タブレット
     md: 600,  // 小型デスクトップ
-    lg: 800   // 大型デスクトップ
+    lg: 1000   // 大型デスクトップ
   };
 
   // 画像の高さを固定値で定義
@@ -43,7 +43,7 @@ export default function Hero() {
     xs: 169,  // 16:9のアスペクト比
     sm: 225,
     md: 338,
-    lg: 450
+    lg: 600
   };
 
   const DISPLAY_DURATION = 6;
