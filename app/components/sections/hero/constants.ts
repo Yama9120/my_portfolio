@@ -27,8 +27,8 @@ export const IMAGE_SIZES = {
 export const projectImages = [
   '/images/projects/cafeteria_poster.jpg',
   '/images/projects/librarin_top.png',
-  '/images/about/my_image.jpg',
+  '/images/about/my_image_low.jpg',
   '/images/projects/cafeteria_poster.jpg',
   '/images/projects/librarin_top.png',
-  '/images/about/my_image.jpg',
+  '/images/about/my_image_low.jpg',
 ];

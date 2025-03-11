@@ -41,7 +41,7 @@ const ProjectImage = ({ src, index }: ProjectImageProps) => (
       src={src}
       alt={`Project ${index + 1}`}
       fill
-      quality={1} // 画質を大幅に下げる（半透明の背景画像なので許容範囲）
+      quality={10} // 画質を大幅に下げる（半透明の背景画像なので許容範囲）
       loading={index < 2 ? "eager" : "lazy"} // 最初の2枚のみeager、残りはlazy
       priority={index < 2} // 最初の2枚のみ優先読み込み
       style={{
