@@ -57,36 +57,48 @@ export default function ProjectCard({ project }: ProjectCardProps) {
     setOpen(false);
   };
   
+  const lastHoverTimeRef = useRef<number>(0); // 新しいref を追加
+
   const handleMouseEnter = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    // 前回のタイマーがあれば解除
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-      timeoutRef.current = null;
-    }
-    
-    // ホバー回数を増やす
-    setHoverCount(prev => {
-      const newCount = prev + 1;
-      const newIndex = newCount % borderColorCycle.length;
-      const newColor = borderColorCycle[newIndex];
+      const now = Date.now();
       
-      // 最初の透明色はスキップ
-      if (newColor !== 'rgba(255, 255, 255, 0)') {
-        try {
-          // 現在のマウス位置を使って波紋を作成
-          triggerRipple(e.clientX, e.clientY, newColor);
-        } catch (error) {
-          console.error('Failed to create ripple effect:', error);
-        }
+      // 前回のタイマーがあれば解除
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
       }
       
-      return newCount;
-    });
-    
-    // 10秒後にホバー効果をリセットする設定
-    timeoutRef.current = setTimeout(() => {
-      setHoverCount(0);
-    }, 10000); // 10秒後にリセット
+      // カード固有のスロットリング (200ms)
+      if (now - lastHoverTimeRef.current < 20) {
+        // 色の変更だけ行い、波紋は生成しない
+        setHoverCount(prev => prev + 1);
+        return;
+      }
+      lastHoverTimeRef.current = now;
+      
+      // ホバー回数を増やす
+      setHoverCount(prev => {
+        const newCount = prev + 1;
+        const newIndex = newCount % borderColorCycle.length;
+        const newColor = borderColorCycle[newIndex];
+        
+        // 最初の透明色はスキップ
+        if (newColor !== 'rgba(255, 255, 255, 0)') {
+          try {
+            // 現在のマウス位置を使って波紋を作成
+            triggerRipple(e.clientX, e.clientY, newColor);
+          } catch (error) {
+            console.error('Failed to create ripple effect:', error);
+          }
+        }
+        
+        return newCount;
+      });
+      
+      // 10秒後にホバー効果をリセットする設定
+      timeoutRef.current = setTimeout(() => {
+        setHoverCount(0);
+      }, 10000); // 10秒後にリセット
   }, [triggerRipple]);
 
   return (
