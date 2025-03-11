@@ -33,26 +33,31 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
   return (
     <>
-      <Card>
+      <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
         <CardMedia
           component="img"
           height="200"
           image={project.imageUrl}
           alt={project.title}
         />
-        <CardContent>
+        <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
           <Typography variant="h6" gutterBottom>
             {project.title}
           </Typography>
-          <Typography variant="body2" color="text.secondary" paragraph>
+          <Typography 
+            variant="body2" 
+            color="text.secondary" 
+            paragraph
+            sx={{ flexGrow: 1 }}
+          >
             {project.description}
           </Typography>
-          <Stack direction="row" spacing={1} flexWrap="wrap" gap={1}>
+          <Stack direction="row" spacing={1} flexWrap="wrap" gap={1} sx={{ mb: 2 }}>
             {project.technologies.map((tech) => (
               <Chip key={tech} label={tech} size="small" />
             ))}
           </Stack>
-          <Button onClick={handleClickOpen} sx={{ mt: 2 }}>
+          <Button sx={{ mt: "10px" }}  onClick={handleClickOpen}>
             詳細を見る
           </Button>
         </CardContent>
@@ -61,9 +66,15 @@ export default function ProjectCard({ project }: ProjectCardProps) {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{project.title}</DialogTitle>
         <DialogContent>
-          <Typography paragraph>
+        <Typography
+            variant="body1"
+            sx={{
+                whiteSpace: 'pre-wrap',  // または 'pre-line'
+                mb: 2
+            }}
+        >
             {project.detailedDescription}
-          </Typography>
+        </Typography>
           {/* 追加の詳細情報 */}
         </DialogContent>
         <DialogActions>

@@ -125,7 +125,7 @@ export default function SectionContainer({
                     border: '1px solid #e0e0e0',
                     borderRadius: '4px',
                     boxShadow: 1,
-                    p: 3,
+                    p: 1.5,
                     opacity: isVisible ? 1 : 0,
                     animation: isVisible 
                         ? `${align === 'left' ? slideInLeft : slideInRight} 0.8s ease-out forwards`
