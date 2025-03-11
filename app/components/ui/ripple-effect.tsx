@@ -27,6 +27,8 @@ export default function RippleEffect({ children }: RippleEffectProps) {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const rippleCountRef = useRef<number>(0);
   const lastTriggerTimeRef = useRef<number>(0);
+  // 最大同時波紋数を制限するためのカウンター
+  const activeRipplesRef = useRef<number>(0);
 
   React.useEffect(() => {
     // SVG要素を作成してコンテナに追加
@@ -38,7 +40,7 @@ export default function RippleEffect({ children }: RippleEffectProps) {
       width: 100vw;
       height: 100vh;
       pointer-events: none;
-      z-index: 1; // 更に前面に
+      z-index: -10; /* さらに下層に配置 */
     `);
     
     if (containerRef.current) {
@@ -56,10 +58,17 @@ export default function RippleEffect({ children }: RippleEffectProps) {
   const triggerRipple = (x: number, y: number, color: string) => {
     if (!svgRef.current) return;
     
-    // スロットリング
+    // スロットリング時間を長く (600ms)
     const now = Date.now();
-    if (now - lastTriggerTimeRef.current < 300) return;
+    if (now - lastTriggerTimeRef.current < 600) return;
     lastTriggerTimeRef.current = now;
+    
+    // アクティブな波紋数を制限（10まで）
+    if (activeRipplesRef.current >= 10) {
+      return;
+    }
+    
+    activeRipplesRef.current += 1;
     
     // 固有のIDを生成
     const rippleId = `ripple-${rippleCountRef.current++}`;
@@ -73,7 +82,8 @@ export default function RippleEffect({ children }: RippleEffectProps) {
       width: 100vw;
       height: 100vh;
       pointer-events: none;
-      z-index: 1;
+      z-index: -10;
+      will-change: transform; /* GPU加速のヒント */
     `);
     
     // 円を描画
@@ -83,24 +93,24 @@ export default function RippleEffect({ children }: RippleEffectProps) {
     circle.setAttribute('cy', y.toString());
     circle.setAttribute('r', '0');
     circle.setAttribute('stroke', color);
-    circle.setAttribute('stroke-width', '3');
+    circle.setAttribute('stroke-width', '5'); // 線を太く
     circle.setAttribute('fill', 'none');
-    circle.setAttribute('opacity', '0.8');
+    circle.setAttribute('opacity', '0.7');
     
     // アニメーション要素を作成
     const animateRadius = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
     animateRadius.setAttribute('attributeName', 'r');
     animateRadius.setAttribute('from', '0');
-    animateRadius.setAttribute('to', '1000');
-    animateRadius.setAttribute('dur', '6s');
+    animateRadius.setAttribute('to', '800'); // 若干小さく
+    animateRadius.setAttribute('dur', '1.5s'); // 速度をさらに速く
     animateRadius.setAttribute('begin', '0s');
     animateRadius.setAttribute('fill', 'freeze');
     
     const animateOpacity = document.createElementNS('http://www.w3.org/2000/svg', 'animate');
     animateOpacity.setAttribute('attributeName', 'opacity');
-    animateOpacity.setAttribute('from', '0.8');
+    animateOpacity.setAttribute('from', '0.7');
     animateOpacity.setAttribute('to', '0');
-    animateOpacity.setAttribute('dur', '6s');
+    animateOpacity.setAttribute('dur', '1.5s'); // 消える速度をさらに速く
     animateOpacity.setAttribute('begin', '0s');
     animateOpacity.setAttribute('fill', 'freeze');
     
@@ -120,8 +130,9 @@ export default function RippleEffect({ children }: RippleEffectProps) {
     setTimeout(() => {
       if (containerRef.current && rippleSvg.parentNode === containerRef.current) {
         containerRef.current.removeChild(rippleSvg);
+        activeRipplesRef.current -= 1; // アクティブ波紋カウントを減らす
       }
-    }, 6000);
+    }, 5000); // タイムアウトを短縮
   };
 
   return (
