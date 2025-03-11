@@ -59,6 +59,8 @@ export default function Header() {
     const [activeSection, setActiveSection] = useState('');
     const [hamburgerOpacity, setHamburgerOpacity] = useState(1);
     const [lastClickedSection, setLastClickedSection] = useState('');
+    const [headerOpacity, setHeaderOpacity] = useState(0);
+    const [headerPosition, setHeaderPosition] = useState('absolute');
 
     const scrollToSection = (href: string) => {
         if (href === '#hero') {
@@ -115,8 +117,19 @@ export default function Header() {
             const heroHeight = window.innerHeight;
             const scrollPosition = window.scrollY;
             const offset = NAV_HEIGHT + 20;
-    
-            setIsFixed(scrollPosition > heroHeight - offset);
+
+            // ヘッダーの透明度を計算
+            // スクロール位置が画面高さの60%を超えたら徐々に不透明に
+            const opacity = Math.min(
+                1,
+                Math.max(0, (scrollPosition - (heroHeight * 0.6)) / (heroHeight * 0.3))
+            );
+            setHeaderOpacity(opacity);
+
+            // ヘッダーの位置を設定
+            // 完全に不透明になったら固定位置に
+            setHeaderPosition(opacity >= 1 ? 'fixed' : 'absolute');
+            setIsFixed(opacity >= 1);
     
             // モバイル時のハンバーガーメニューの透明度制御
             if (window.innerWidth <= MOBILE_BREAKPOINT) {
@@ -193,9 +206,11 @@ export default function Header() {
                         aria-label="menu"
                         onClick={() => setIsDrawerOpen(true)}
                         sx={{ 
-                            color: 'grey.800',
+                            color: headerOpacity >= 0.5 ? 'grey.800' : 'white',
                             pointerEvents: 'auto',
                             position: 'relative',
+                            transition: 'color 0.3s ease',
+                            border: 'none',
                         }}
                     >
                         <MenuIcon />
@@ -317,15 +332,19 @@ export default function Header() {
             {/* ナビゲーションボタン - pointer-eventsとz-indexの調整 */}
             <Box
                 sx={{
-                    position: isFixed ? 'fixed' : 'absolute',
-                    top: isFixed ? '0' : 'auto',
-                    bottom: isFixed ? 'auto' : '0rem',
+                    position: headerPosition,
+                    top: headerPosition === 'fixed' ? '0' : 'auto',
+                    bottom: headerPosition === 'absolute' ? '0rem' : 'auto',
                     left: '50%',
                     transform: 'translateX(-50%)',
                     transition: 'all 0.3s ease',
                     zIndex: 1500, // ハンバーガーメニューより低いz-index
                     width: '100%',
-                    bgcolor: 'rgb(239, 239, 239)',
+                    bgcolor: `rgba(239, 239, 239, ${headerOpacity})`,
+                    backdropFilter: headerOpacity > 0 ? 'blur(8px)' : 'none',
+                    boxShadow: headerOpacity >= 1 
+                        ? '0 2px 4px rgba(0,0,0,0.1)' 
+                        : 'none',
                     pointerEvents: 'auto',
                 }}
             >
@@ -399,25 +418,34 @@ export default function Header() {
                                         });
                                     }}
                                     sx={{
-                                        color: isActive ? item.color : sectionColors.default,
+                                        color: headerOpacity >= 0.5 
+                                            ? (isActive ? item.color : sectionColors.default)
+                                            : 'white',
                                         fontSize: isActive ? '1.2rem' : '1.1rem',
                                         fontWeight: isActive ? 'bold' : 'normal',
                                         position: 'relative',
                                         padding: '8px 16px',
                                         cursor: 'pointer',
+                                        // ボーダーを削除
+                                        border: 'none',
                                         '&::before': {
                                             content: '""',
                                             position: 'absolute',
-                                            top: 0,
+                                            top: headerOpacity >= 0.5 ? 0 : 'auto',
+                                            bottom: headerOpacity >= 0.5 ? 'auto' : 0,
                                             left: '50%',
                                             transform: 'translateX(-50%)',
                                             width: isActive ? '100%' : '0%',
                                             height: '2px',
-                                            backgroundColor: isActive ? item.color : 'transparent',
+                                            backgroundColor: isActive 
+                                                ? item.color 
+                                                : 'transparent',
                                             transition: 'all 0.3s ease',
                                         },
                                         '&:hover': {
-                                            color: item.color,
+                                            color: headerOpacity >= 0.5 ? item.color : item.color, // ホバー時は常にアイテムの色
+                                            backgroundColor: 'transparent',
+                                            border: 'none',
                                             '&::before': {
                                                 width: '100%',
                                                 backgroundColor: item.color,
