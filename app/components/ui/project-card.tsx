@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { 
   Card, 
   CardContent, 
@@ -20,8 +20,30 @@ interface ProjectCardProps {
   project: Project;
 }
 
+// 枠線の色バリエーション
+const borderColorCycle = [
+  'rgba(255, 255, 255, 0)',      // 透明（初期状態）
+  'rgba(255, 99, 71, 1)',        // トマト
+  'rgba(70, 130, 180, 1)',       // スティールブルー
+  'rgba(46, 139, 87, 1)',        // シーグリーン
+  'rgba(138, 43, 226, 1)',       // ブルーバイオレット
+  'rgba(255, 140, 0, 1)',        // ダークオレンジ
+  'rgba(220, 20, 60, 1)',        // クリムゾン
+  'rgba(32, 178, 170, 1)',       // ライトシーグリーン
+  'rgba(75, 0, 130, 1)',         // インディゴ
+  'rgba(255, 20, 147, 1)',       // ディープピンク
+  'rgba(0, 128, 128, 1)',        // ティール
+  'rgba(218, 165, 32, 1)',       // ゴールデンロッド
+];
+
 export default function ProjectCard({ project }: ProjectCardProps) {
   const [open, setOpen] = useState(false);
+  const [hoverCount, setHoverCount] = useState(0);
+  const currentColorIndex = hoverCount % borderColorCycle.length;
+  const borderColor = borderColorCycle[currentColorIndex];
+  
+  // タイマーIDを保存するためのref
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -30,24 +52,49 @@ export default function ProjectCard({ project }: ProjectCardProps) {
   const handleClose = () => {
     setOpen(false);
   };
+  
+  const handleMouseEnter = useCallback(() => {
+    // 前回のタイマーがあれば解除
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = null;
+    }
+    
+    // ホバー回数を増やす
+    setHoverCount(prev => prev + 1);
+    
+    // 10秒後にホバー効果をリセットする設定
+    timeoutRef.current = setTimeout(() => {
+      setHoverCount(0);
+    }, 10000); // 10秒後にリセット
+  }, []);
 
   return (
     <>
-      <Card sx={{ 
-        height: '100%', 
-        display: 'flex', 
-        flexDirection: 'column',
-        transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-        '&:hover': {
-          transform: 'scale(1.02)',
-          boxShadow: '0 8px 16px rgba(0,0,0,0.2)',
-        }
-      }}>
+      <Card 
+        sx={{ 
+          height: '100%', 
+          display: 'flex', 
+          flexDirection: 'column',
+          backgroundColor: 'white',
+          borderWidth: '3px',
+          borderStyle: 'solid',
+          borderColor: borderColor,
+          borderRadius: '8px',
+          transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.5s ease',
+          '&:hover': {
+            transform: 'scale(1.02)',
+            boxShadow: `0 8px 16px ${borderColor === 'rgba(255, 255, 255, 0)' ? 'rgba(0,0,0,0.2)' : borderColor.replace('1)', '0.3)')}`,
+          }
+        }}
+        onMouseEnter={handleMouseEnter}
+      >
         <CardMedia
           component="img"
           height="200"
           image={project.imageUrl}
           alt={project.title}
+          sx={{ borderBottom: borderColor !== 'rgba(255, 255, 255, 0)' ? `1px solid ${borderColor}` : 'none' }}
         />
         <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
           <Typography variant="h6" gutterBottom>
@@ -66,7 +113,13 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               <Chip key={tech} label={tech} size="small" />
             ))}
           </Stack>
-          <Button sx={{ mt: "10px" }}  onClick={handleClickOpen}>
+          <Button 
+            sx={{ 
+              mt: "10px",
+              color: borderColor !== 'rgba(255, 255, 255, 0)' ? borderColor : undefined
+            }} 
+            onClick={handleClickOpen}
+          >
             詳細を見る
           </Button>
         </CardContent>
@@ -84,7 +137,6 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         >
             {project.detailedDescription}
         </Typography>
-          {/* 追加の詳細情報 */}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>閉じる</Button>
