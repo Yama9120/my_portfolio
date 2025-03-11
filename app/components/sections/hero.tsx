@@ -3,14 +3,51 @@
 import { Box, Typography, Container, useTheme } from "@mui/material";
 import { motion, useScroll, useTransform } from "framer-motion";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import Image from 'next/image';
+import React from 'react';
 
-// Motion componentsの定義を変更
+// 画像位置の定義
+const positions = [
+  { top: '10%', left: '5%', right: 'auto', bottom: 'auto' },    // 左上
+  { top: 'auto', left: 'auto', right: '5%', bottom: '10%' },    // 右下
+
+];
+
+// 画像パスの配列
+const projectImages = [
+  '/images/projects/cafeteria_poster.png',
+  '/images/projects/librarin_top.png',
+  '/images/about/my_image.jpg',
+  '/images/projects/cafeteria_poster.png',
+  '/images/projects/librarin_top.png',
+  '/images/about/my_image.jpg',
+];
+
 const MotionBox = motion(Box);
 const MotionTypography = motion(Typography);
 
 export default function Hero() {
   const theme = useTheme();
   const { scrollY } = useScroll();
+  
+  // 画像のサイズをレスポンシブに定義
+  const IMAGE_WIDTH = {
+    xs: 300,  // モバイル
+    sm: 400,  // タブレット
+    md: 600,  // 小型デスクトップ
+    lg: 800   // 大型デスクトップ
+  };
+
+  // 画像の高さを固定値で定義
+  const IMAGE_HEIGHT = {
+    xs: 169,  // 16:9のアスペクト比
+    sm: 225,
+    md: 338,
+    lg: 450
+  };
+
+  const DISPLAY_DURATION = 6;
+
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
   
   const words = "My Portfolio".split(" ");
@@ -53,6 +90,61 @@ export default function Hero() {
           ease: "linear"
         }}
       />
+      
+      {/* 画像表示エリア */}
+      {projectImages.map((src, index) => {
+        const positionIndex = index % 2; // 左上と右下を交互に
+        return (
+          <MotionBox
+            key={`${src}-${index}`}
+            sx={{
+              position: 'absolute',
+              width: {
+                xs: IMAGE_WIDTH.xs,
+                sm: IMAGE_WIDTH.sm,
+                md: IMAGE_WIDTH.md,
+                lg: IMAGE_WIDTH.lg
+              },
+              height: {
+                xs: IMAGE_HEIGHT.xs,
+                sm: IMAGE_HEIGHT.sm,
+                md: IMAGE_HEIGHT.md,
+                lg: IMAGE_HEIGHT.lg
+              },
+              zIndex: 1,
+              opacity: 0.15,
+              borderRadius: 2,
+              overflow: 'hidden',
+              backdropFilter: 'blur(4px)',
+              ...positions[positionIndex],
+            }}
+            initial={{ opacity: 0 }}
+            animate={{
+              opacity: [0, 0.15, 0.15, 0]
+            }}
+            transition={{
+              duration: DISPLAY_DURATION,
+              times: [0, 0.2, 0.8, 1],
+              delay: index * (DISPLAY_DURATION / 1.5),
+              repeat: Infinity,
+              repeatDelay: projectImages.length * (DISPLAY_DURATION / 2),
+              ease: "easeInOut"
+            }}
+          >
+            <Image
+              src={src}
+              alt={`Project ${index + 1}`}
+              fill
+              style={{
+                objectFit: 'cover',
+                objectPosition: 'center',
+                filter: 'brightness(0.9)',
+              }}
+              sizes="(max-width: 600px) 300px, (max-width: 960px) 400px, (max-width: 1280px) 600px, 800px"
+            />
+          </MotionBox>
+        );
+      })}
 
       {/* メインコンテンツ */}
       <Container 
