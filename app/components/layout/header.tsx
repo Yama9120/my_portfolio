@@ -207,7 +207,7 @@ export default function Header() {
                         onClick={() => setIsDrawerOpen(true)}
                         sx={{ 
                             color: headerOpacity >= 0.5 ? 'grey.800' : 'white',
-                            pointerEvents: 'auto',
+                            pointerEvents: hamburgerOpacity > 0.1 ? 'auto' : 'none', // 透明度が低い場合はクリック無効化
                             position: 'relative',
                             transition: 'color 0.3s ease',
                             border: 'none',
