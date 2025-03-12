@@ -27,7 +27,11 @@ export const projects: Project[] = [
         ].join('\n'),
         imageUrl: "images/projects/librarin_top.png",
         technologies: ["node.js", "JavaScript", "EJS", "CSS", "Firebase", "Docker", "Nginx"],
-        serviceUrl: "https://librarin.tgif.hiroshima-u.ac.jp/"
+        serviceUrl: "https://librarin.tgif.hiroshima-u.ac.jp/",
+        links: [
+            "images/projects/cafeteria_poster.png",
+            "images/projects/tgif_items.jpg"
+        ]
     },
     {
         id: 2,

@@ -20,6 +20,9 @@ import { useRipple } from './ripple-effect';
 import Link from 'next/link';
 import LaunchIcon from '@mui/icons-material/Launch';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { IconButton } from '@mui/material';
 
 interface ProjectCardProps {
   project: Project;
@@ -45,6 +48,29 @@ export default function ProjectCard({ project }: ProjectCardProps) {
   const [open, setOpen] = useState(false);
   const [hoverCount, setHoverCount] = useState(0);
   const [dialogBorderColor, setDialogBorderColor] = useState(''); // ダイアログ用の色を保存
+
+  // 画像スライダー用のステート
+  const [imageIndex, setImageIndex] = useState(0);
+
+  // 全ての画像ソースを含む配列を作成する関数
+  const getAllImages = () => {
+    return project.links?.length ? 
+      [project.imageUrl, ...project.links] : 
+      [project.imageUrl];
+  };
+
+  // 前の画像を表示
+  const handlePrevImage = () => {
+    const images = getAllImages();
+    setImageIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1));
+  };
+
+  // 次の画像を表示
+  const handleNextImage = () => {
+    const images = getAllImages();
+    setImageIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0));
+  };
+
   const currentColorIndex = hoverCount % borderColorCycle.length;
   const borderColor = borderColorCycle[currentColorIndex];
   
@@ -179,29 +205,109 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           {project.title}
         </DialogTitle>
         <DialogContent sx={{ px: 3, pt: 3 }}>
-          {/* 大きな画像を表示 */}
-          <Box 
-            sx={{ 
+        {/* 大きな画像を表示 */}
+        <Box 
+          sx={{ 
+            width: '100%',
+            height: { xs: '200px', sm: '300px', md: '500px' },
+            position: 'relative',
+            mb: 3,
+            mt: 3,
+            borderRadius: 1,
+            overflow: 'hidden',
+            boxShadow: `0 4px 8px ${dialogBorderColor !== 'rgba(255, 255, 255, 0)' ? dialogBorderColor.replace('1)', '0.3)') : 'rgba(0,0,0,0.2)'}`
+          }}
+        >
+          {/* 画像表示 */}
+          <Box
+            sx={{
               width: '100%',
-              height: { xs: '200px', sm: '300px', md: '500px' },
+              height: '100%',
               position: 'relative',
-              mb: 3,
-              mt: 3,
-              borderRadius: 1,
-              overflow: 'hidden',
-              boxShadow: `0 4px 8px ${dialogBorderColor !== 'rgba(255, 255, 255, 0)' ? dialogBorderColor.replace('1)', '0.3)') : 'rgba(0,0,0,0.2)'}`
             }}
           >
             <img 
-              src={project.imageUrl} 
-              alt={project.title}
+              src={getAllImages()[imageIndex]} 
+              alt={`${project.title} - イメージ ${imageIndex + 1}`}
               style={{ 
                 width: '100%', 
                 height: '100%', 
                 objectFit: 'cover' 
               }} 
             />
+            
+            {/* 画像が複数ある場合のみ矢印を表示 */}
+            {getAllImages().length > 1 && (
+              <>
+                {/* 左矢印 */}
+                <IconButton
+                  onClick={handlePrevImage}
+                  sx={{
+                    position: 'absolute',
+                    left: 8,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                    },
+                    zIndex: 2,
+                  }}
+                >
+                  <ArrowBackIosNewIcon />
+                </IconButton>
+                
+                {/* 右矢印 */}
+                <IconButton
+                  onClick={handleNextImage}
+                  sx={{
+                    position: 'absolute',
+                    right: 8,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                    },
+                    zIndex: 2,
+                  }}
+                >
+                  <ArrowForwardIosIcon />
+                </IconButton>
+                
+                {/* ページインジケータ */}
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    bottom: 16,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    display: 'flex',
+                    gap: 1,
+                    zIndex: 2,
+                  }}
+                >
+                  {getAllImages().map((_, idx) => (
+                    <Box
+                      key={idx}
+                      onClick={() => setImageIndex(idx)}
+                      sx={{
+                        width: 8,
+                        height: 8,
+                        borderRadius: '50%',
+                        backgroundColor: idx === imageIndex 
+                          ? (dialogBorderColor !== 'rgba(255, 255, 255, 0)' ? dialogBorderColor : 'primary.main')
+                          : 'rgba(255, 255, 255, 0.5)',
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease',
+                      }}
+                    />
+                  ))}
+                </Box>
+              </>
+            )}
           </Box>
+        </Box>
 
           {/* プロジェクトリンク */}
           <Box sx={{ mt: 3, mb: 4, display: 'flex', gap: 2, flexWrap: 'wrap' }}>
