@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 import { motion } from "framer-motion";
 import { ANIMATION_CONFIG } from '../constants';
 
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 const AnimatedBackground = () => (
   <MotionBox
