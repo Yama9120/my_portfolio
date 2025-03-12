@@ -17,6 +17,9 @@ import {
 } from '@mui/material';
 import type { Project } from '@/app/lib/data/projects';
 import { useRipple } from './ripple-effect';
+import Link from 'next/link';
+import LaunchIcon from '@mui/icons-material/Launch';
+import GitHubIcon from '@mui/icons-material/GitHub';
 
 interface ProjectCardProps {
   project: Project;
@@ -41,6 +44,7 @@ const borderColorCycle = [
 export default function ProjectCard({ project }: ProjectCardProps) {
   const [open, setOpen] = useState(false);
   const [hoverCount, setHoverCount] = useState(0);
+  const [dialogBorderColor, setDialogBorderColor] = useState(''); // ダイアログ用の色を保存
   const currentColorIndex = hoverCount % borderColorCycle.length;
   const borderColor = borderColorCycle[currentColorIndex];
   
@@ -51,6 +55,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleClickOpen = () => {
+    setDialogBorderColor(borderColor); // 現在の色をダイアログ用に保存
     setOpen(true);
   };
 
@@ -161,13 +166,13 @@ export default function ProjectCard({ project }: ProjectCardProps) {
       <Dialog 
         open={open} 
         onClose={handleClose} 
-        maxWidth="md" // ダイアログのサイズを大きくする
+        maxWidth="md"
         fullWidth
         sx={{ zIndex: 20000 }}
       >
         <DialogTitle 
           sx={{ 
-            borderBottom: `2px solid ${borderColor !== 'rgba(255, 255, 255, 0)' ? borderColor : '#ddd'}`,
+            borderBottom: `2px solid ${dialogBorderColor !== 'rgba(255, 255, 255, 0)' ? dialogBorderColor : '#ddd'}`,
             pb: 1
           }}
         >
@@ -181,9 +186,10 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               height: { xs: '200px', sm: '300px', md: '500px' },
               position: 'relative',
               mb: 3,
+              mt: 3,
               borderRadius: 1,
               overflow: 'hidden',
-              boxShadow: `0 4px 8px ${borderColor !== 'rgba(255, 255, 255, 0)' ? borderColor.replace('1)', '0.3)') : 'rgba(0,0,0,0.2)'}`
+              boxShadow: `0 4px 8px ${dialogBorderColor !== 'rgba(255, 255, 255, 0)' ? dialogBorderColor.replace('1)', '0.3)') : 'rgba(0,0,0,0.2)'}`
             }}
           >
             <img 
@@ -196,9 +202,66 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               }} 
             />
           </Box>
-          
+
+          {/* プロジェクトリンク */}
+          <Box sx={{ mt: 3, mb: 4, display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+            {project.serviceUrl && (
+              <Link
+                href={project.serviceUrl}
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{ textDecoration: 'none' }}
+              >
+                <Button 
+                  variant="outlined"
+                  endIcon={<LaunchIcon />}
+                  sx={{ 
+                    px: 3,
+                    py: 1,
+                    fontWeight: 500,
+                    textTransform: 'none',
+                    borderRadius: 2,
+                    borderColor: dialogBorderColor !== 'rgba(255, 255, 255, 0)' ? dialogBorderColor : 'primary.main',
+                    color: dialogBorderColor !== 'rgba(255, 255, 255, 0)' ? dialogBorderColor : 'primary.main',
+                    transition: 'all 0.2s ease',
+                    '&:hover': {
+                      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                      borderColor: dialogBorderColor !== 'rgba(255, 255, 255, 0)' ? dialogBorderColor : 'primary.dark',
+                      transform: 'translateY(-1px)'
+                    }
+                  }}
+                >
+                  サービスを見る
+                </Button>
+              </Link>
+            )}
+            
+            {/* GitHubボタンも同様に変更 */}
+            {project.githubUrl && (
+              <Link
+                href={project.githubUrl}
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{ textDecoration: 'none' }}
+              >
+                <Button 
+                  variant="outlined"
+                  startIcon={<GitHubIcon />}
+                  sx={{ 
+                    // borderColorをdialogBorderColorに置き換え
+                    borderColor: dialogBorderColor !== 'rgba(255, 255, 255, 0)' ? dialogBorderColor : 'primary.main',
+                    color: dialogBorderColor !== 'rgba(255, 255, 255, 0)' ? dialogBorderColor : 'primary.main',
+                    // 他のスタイルも同様に
+                  }}
+                >
+                  GitHub
+                </Button>
+              </Link>
+            )}
+          </Box>
+
           {/* プロジェクト詳細情報 */}
-          <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', mt: 1 }}>
+          <Typography variant="h6" gutterBottom sx={{ mt: 1 }}>
             概要
           </Typography>
           
@@ -213,7 +276,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           </Typography>
           
           {/* 技術スタック */}
-          <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', mt: 2 }}>
+          <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
             使用技術
           </Typography>
           
@@ -231,17 +294,12 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             ))}
           </Stack>
           
-          {/* ここに追加の画像やリンクなどを表示できます */}
-          {project.links && (
-            <>
-            </>
-          )}
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
           <Button 
             onClick={handleClose}
             sx={{ 
-              color: borderColor !== 'rgba(255, 255, 255, 0)' ? borderColor : undefined 
+              color: dialogBorderColor !== 'rgba(255, 255, 255, 0)' ? dialogBorderColor : undefined 
             }}
           >
             閉じる

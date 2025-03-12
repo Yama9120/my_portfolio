@@ -27,7 +27,6 @@ export const projects: Project[] = [
         ].join('\n'),
         imageUrl: "images/projects/librarin_top.png",
         technologies: ["node.js", "JavaScript", "EJS", "CSS", "Firebase", "Docker", "Nginx"],
-        githubUrl: "https://github.com/yourusername/todo-app",
         serviceUrl: "https://librarin.tgif.hiroshima-u.ac.jp/"
     },
     {
@@ -42,7 +41,6 @@ export const projects: Project[] = [
         ].join('\n'),
         imageUrl: "images/projects/cafeteria_poster.png",
         technologies: ["Figma", "Next.js", "TypeScript", "Mui", "Go"],
-        githubUrl: "https://github.com/yourusername/todo-app",
         serviceUrl: "https://prd-tgo-i-app.tgif.hiroshima-u.ac.jp/ja/cafeteria/congestion"
     },
     {
@@ -56,7 +54,6 @@ export const projects: Project[] = [
         ].join('\n'),
         imageUrl: "images/projects/tgif_items.jpg",
         technologies: ["Illustrator", "Photoshop", "Clip Studio Paint", "Blender"],
-        githubUrl: "https://github.com/yourusername/todo-app"
     },
     {
         id: 4,
@@ -70,7 +67,6 @@ export const projects: Project[] = [
         ].join('\n'),
         imageUrl: "images/projects/portfolio_site.jpg",
         technologies: ["Figma", "Next.js", "TypeScript", "Mui"],
-        githubUrl: "https://github.com/yourusername/portfolio",
         serviceUrl: "https://your-portfolio.vercel.app"
     },
     {
@@ -85,7 +81,6 @@ export const projects: Project[] = [
         ].join('\n'),
         imageUrl: "images/projects/chill_title.png",
         technologies: ["Python", "Pyxel", "Clip Studio Paint"],
-        githubUrl: "https://github.com/yourusername/todo-app",
         serviceUrl: "https://your-portfolio.vercel.app"
     },
     {
@@ -101,6 +96,5 @@ export const projects: Project[] = [
         imageUrl: "images/projects/youtube_chat.jpg",
         technologies: ["TypeScript"],
         githubUrl: "https://github.com/yourusername/todo-app",
-        serviceUrl: "https://your-portfolio.vercel.app"
     },
 ];
