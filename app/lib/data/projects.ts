@@ -7,6 +7,7 @@ export type Project = {
     technologies: string[];
     githubUrl?: string;
     serviceUrl?: string;
+    links?: string[];
 };
 
 export const projects: Project[] = [

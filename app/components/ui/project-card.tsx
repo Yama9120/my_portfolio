@@ -7,6 +7,7 @@ import {
   CardMedia, 
   Typography, 
   Chip, 
+  Box,
   Stack,
   Button,
   Dialog,
@@ -157,21 +158,94 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         </CardContent>
       </Card>
 
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{project.title}</DialogTitle>
-        <DialogContent>
-        <Typography
+      <Dialog 
+        open={open} 
+        onClose={handleClose} 
+        maxWidth="md" // ダイアログのサイズを大きくする
+        fullWidth
+        sx={{ zIndex: 20000 }}
+      >
+        <DialogTitle 
+          sx={{ 
+            borderBottom: `2px solid ${borderColor !== 'rgba(255, 255, 255, 0)' ? borderColor : '#ddd'}`,
+            pb: 1
+          }}
+        >
+          {project.title}
+        </DialogTitle>
+        <DialogContent sx={{ px: 3, pt: 3 }}>
+          {/* 大きな画像を表示 */}
+          <Box 
+            sx={{ 
+              width: '100%',
+              height: { xs: '200px', sm: '300px', md: '500px' },
+              position: 'relative',
+              mb: 3,
+              borderRadius: 1,
+              overflow: 'hidden',
+              boxShadow: `0 4px 8px ${borderColor !== 'rgba(255, 255, 255, 0)' ? borderColor.replace('1)', '0.3)') : 'rgba(0,0,0,0.2)'}`
+            }}
+          >
+            <img 
+              src={project.imageUrl} 
+              alt={project.title}
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                objectFit: 'cover' 
+              }} 
+            />
+          </Box>
+          
+          {/* プロジェクト詳細情報 */}
+          <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', mt: 1 }}>
+            概要
+          </Typography>
+          
+          <Typography
             variant="body1"
             sx={{
-                whiteSpace: 'pre-wrap',  // または 'pre-line'
-                mb: 2
+              whiteSpace: 'pre-wrap',
+              mb: 3
             }}
-        >
+          >
             {project.detailedDescription}
-        </Typography>
+          </Typography>
+          
+          {/* 技術スタック */}
+          <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', mt: 2 }}>
+            使用技術
+          </Typography>
+          
+          <Stack direction="row" spacing={1} flexWrap="wrap" gap={1} sx={{ mb: 3 }}>
+            {project.technologies.map((tech) => (
+              <Chip 
+                key={tech} 
+                label={tech}
+                sx={{ 
+                  borderColor: borderColor !== 'rgba(255, 255, 255, 0)' ? borderColor : undefined,
+                  borderWidth: 1,
+                  borderStyle: 'solid',
+                }}
+              />
+            ))}
+          </Stack>
+          
+          {/* ここに追加の画像やリンクなどを表示できます */}
+          {project.links && (
+            <>
+            </>
+          )}
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>閉じる</Button>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button 
+            onClick={handleClose}
+            sx={{ 
+              color: borderColor !== 'rgba(255, 255, 255, 0)' ? borderColor : undefined 
+            }}
+          >
+            閉じる
+          </Button>
         </DialogActions>
       </Dialog>
     </>
