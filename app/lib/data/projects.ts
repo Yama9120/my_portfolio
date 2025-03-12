@@ -71,7 +71,7 @@ export const projects: Project[] = [
     },
     {
         id: 5,
-        title: "チルパズル",
+        title: "Chill Garden (開発中)",
         description: "PythonのPyxelを使用して作成したパズル&箱庭ゲーム",
         detailedDescription: [
             "PythonのPyxelを使用して作成したパズル&箱庭ゲームです。",
