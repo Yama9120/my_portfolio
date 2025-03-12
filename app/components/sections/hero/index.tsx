@@ -8,8 +8,8 @@ import AnimatedBackground from './components/animated-background';
 import ProjectImage from './components/project-image';
 import { projectImages } from './constants';
 
-const MotionBox = motion(Box);
-const MotionTypography = motion(Typography);
+const MotionBox = motion.create(Box);
+const MotionTypography = motion.create(Typography);
 
 const Hero = () => {
   const theme = useTheme();

@@ -4,7 +4,7 @@ import { Box } from "@mui/material";
 import { motion } from "framer-motion";
 import { ANIMATION_CONFIG, IMAGE_SIZES, POSITIONS, projectImages } from '../constants';
 
-const MotionBox = motion(Box);
+const MotionBox = motion.create(Box);
 
 interface ProjectImageProps {
   src: string;
