@@ -278,7 +278,7 @@ export default function Header() {
                     <Stack direction="row" spacing={2} sx={{ mb: 2 }}>
                         <IconButton
                             component={Link}
-                            href="https://github.com/yourusername"
+                            href={process.env.NEXT_PUBLIC_MY_GITHUB}
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="GitHub"
@@ -292,19 +292,7 @@ export default function Header() {
                         </IconButton>
                         <IconButton
                             component={Link}
-                            href="mailto:your.email@example.com"
-                            aria-label="Email"
-                            sx={{ 
-                                '&:hover': {
-                                    color: 'primary.main'
-                                }
-                            }}
-                        >
-                            <EmailIcon />
-                        </IconButton>
-                        <IconButton
-                            component={Link}
-                            href="https://linkedin.com/in/yourusername"
+                            href={process.env.NEXT_PUBLIC_MY_LINKEDIN}
                             target="_blank"
                             rel="noopener noreferrer"
                             aria-label="LinkedIn"
@@ -319,8 +307,11 @@ export default function Header() {
                     </Stack>
 
                     <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                        Ryuki<br />
+                        Name: {process.env.NEXT_PUBLIC_MY_NAME}<br />
                         Frontend Developer<br />
+                        Deingner<br />
+                        <br />
+                        Email: {process.env.NEXT_PUBLIC_MY_EMAIL}<br />
                     </Typography>
 
                     <Typography variant="caption" color="text.secondary">
