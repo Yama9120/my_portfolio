@@ -25,7 +25,7 @@ export default function Footer() {
                 <Stack direction="row" spacing={2}>
                     <IconButton
                         component={Link}
-                        href="https://github.com/yourusername"
+                        href={process.env.NEXT_PUBLIC_MY_GITHUB}
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="GitHub"
@@ -40,20 +40,7 @@ export default function Footer() {
                     </IconButton>
                     <IconButton
                         component={Link}
-                        href="mailto:your.email@example.com"
-                        aria-label="Email"
-                        sx={{ 
-                        '&:hover': {
-                            color: 'primary.main'
-                        },
-                        padding: '10px',
-                        }}
-                    >
-                        <EmailIcon sx={{ fontSize: '2.5rem' }} />
-                    </IconButton>
-                    <IconButton
-                        component={Link}
-                        href="https://linkedin.com/in/yourusername"
+                        href={process.env.NEXT_PUBLIC_MY_LINKEDIN}
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="LinkedIn"
@@ -96,8 +83,11 @@ export default function Footer() {
                 Info
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                Name: Ryuki<br />
+                Name: {process.env.NEXT_PUBLIC_MY_NAME}<br />
                 Frontend Developer<br />
+                Deingner<br />
+                <br />
+                Email: {process.env.NEXT_PUBLIC_MY_EMAIL}<br />
                 </Typography>
             </Grid>
         </Grid>
@@ -109,7 +99,7 @@ export default function Footer() {
           color="text.secondary" 
           align="center"
         >
-          © {new Date().getFullYear()} Ryuki. All rights reserved.
+          © {new Date().getFullYear()} {process.env.NEXT_PUBLIC_MY_NAME}. All rights reserved.
         </Typography>
       </Container>
     </Box>

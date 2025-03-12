@@ -7,6 +7,7 @@ import {
   CardMedia, 
   Typography, 
   Chip, 
+  Box,
   Stack,
   Button,
   Dialog,
@@ -16,6 +17,12 @@ import {
 } from '@mui/material';
 import type { Project } from '@/app/lib/data/projects';
 import { useRipple } from './ripple-effect';
+import Link from 'next/link';
+import LaunchIcon from '@mui/icons-material/Launch';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { IconButton } from '@mui/material';
 
 interface ProjectCardProps {
   project: Project;
@@ -40,6 +47,30 @@ const borderColorCycle = [
 export default function ProjectCard({ project }: ProjectCardProps) {
   const [open, setOpen] = useState(false);
   const [hoverCount, setHoverCount] = useState(0);
+  const [dialogBorderColor, setDialogBorderColor] = useState(''); // ダイアログ用の色を保存
+
+  // 画像スライダー用のステート
+  const [imageIndex, setImageIndex] = useState(0);
+
+  // 全ての画像ソースを含む配列を作成する関数
+  const getAllImages = () => {
+    return project.links?.length ? 
+      [project.imageUrl, ...project.links] : 
+      [project.imageUrl];
+  };
+
+  // 前の画像を表示
+  const handlePrevImage = () => {
+    const images = getAllImages();
+    setImageIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1));
+  };
+
+  // 次の画像を表示
+  const handleNextImage = () => {
+    const images = getAllImages();
+    setImageIndex((prev) => (prev < images.length - 1 ? prev + 1 : 0));
+  };
+
   const currentColorIndex = hoverCount % borderColorCycle.length;
   const borderColor = borderColorCycle[currentColorIndex];
   
@@ -50,6 +81,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleClickOpen = () => {
+    setDialogBorderColor(borderColor); // 現在の色をダイアログ用に保存
     setOpen(true);
   };
 
@@ -157,21 +189,227 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         </CardContent>
       </Card>
 
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{project.title}</DialogTitle>
-        <DialogContent>
-        <Typography
+      <Dialog 
+        open={open} 
+        onClose={handleClose} 
+        maxWidth="md"
+        fullWidth
+        sx={{ zIndex: 20000 }}
+      >
+        <DialogTitle 
+          sx={{ 
+            borderBottom: `2px solid ${dialogBorderColor !== 'rgba(255, 255, 255, 0)' ? dialogBorderColor : '#ddd'}`,
+            pb: 1
+          }}
+        >
+          {project.title}
+        </DialogTitle>
+        <DialogContent sx={{ px: 3, pt: 3 }}>
+        {/* 大きな画像を表示 */}
+        <Box 
+          sx={{ 
+            width: '100%',
+            height: { xs: '200px', sm: '300px', md: '500px' },
+            position: 'relative',
+            mb: 3,
+            mt: 3,
+            borderRadius: 1,
+            overflow: 'hidden',
+            boxShadow: `0 4px 8px ${dialogBorderColor !== 'rgba(255, 255, 255, 0)' ? dialogBorderColor.replace('1)', '0.3)') : 'rgba(0,0,0,0.2)'}`
+          }}
+        >
+          {/* 画像表示 */}
+          <Box
+            sx={{
+              width: '100%',
+              height: '100%',
+              position: 'relative',
+            }}
+          >
+            <img 
+              src={getAllImages()[imageIndex]} 
+              alt={`${project.title} - イメージ ${imageIndex + 1}`}
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                objectFit: 'cover' 
+              }} 
+            />
+            
+            {/* 画像が複数ある場合のみ矢印を表示 */}
+            {getAllImages().length > 1 && (
+              <>
+                {/* 左矢印 */}
+                <IconButton
+                  onClick={handlePrevImage}
+                  sx={{
+                    position: 'absolute',
+                    left: 8,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                    },
+                    zIndex: 2,
+                  }}
+                >
+                  <ArrowBackIosNewIcon />
+                </IconButton>
+                
+                {/* 右矢印 */}
+                <IconButton
+                  onClick={handleNextImage}
+                  sx={{
+                    position: 'absolute',
+                    right: 8,
+                    top: '50%',
+                    transform: 'translateY(-50%)',
+                    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                    },
+                    zIndex: 2,
+                  }}
+                >
+                  <ArrowForwardIosIcon />
+                </IconButton>
+                
+                {/* ページインジケータ */}
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    bottom: 16,
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    display: 'flex',
+                    gap: 1,
+                    zIndex: 2,
+                  }}
+                >
+                  {getAllImages().map((_, idx) => (
+                    <Box
+                      key={idx}
+                      onClick={() => setImageIndex(idx)}
+                      sx={{
+                        width: 8,
+                        height: 8,
+                        borderRadius: '50%',
+                        backgroundColor: idx === imageIndex 
+                          ? (dialogBorderColor !== 'rgba(255, 255, 255, 0)' ? dialogBorderColor : 'primary.main')
+                          : 'rgba(255, 255, 255, 0.5)',
+                        cursor: 'pointer',
+                        transition: 'all 0.3s ease',
+                      }}
+                    />
+                  ))}
+                </Box>
+              </>
+            )}
+          </Box>
+        </Box>
+
+          {/* プロジェクトリンク */}
+          <Box sx={{ mt: 3, mb: 4, display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+            {project.serviceUrl && (
+              <Link
+                href={project.serviceUrl}
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{ textDecoration: 'none' }}
+              >
+                <Button 
+                  variant="outlined"
+                  endIcon={<LaunchIcon />}
+                  sx={{ 
+                    px: 3,
+                    py: 1,
+                    fontWeight: 500,
+                    textTransform: 'none',
+                    borderRadius: 2,
+                    borderColor: dialogBorderColor !== 'rgba(255, 255, 255, 0)' ? dialogBorderColor : 'primary.main',
+                    color: dialogBorderColor !== 'rgba(255, 255, 255, 0)' ? dialogBorderColor : 'primary.main',
+                    transition: 'all 0.2s ease',
+                    '&:hover': {
+                      backgroundColor: 'rgba(0, 0, 0, 0.04)',
+                      borderColor: dialogBorderColor !== 'rgba(255, 255, 255, 0)' ? dialogBorderColor : 'primary.dark',
+                      transform: 'translateY(-1px)'
+                    }
+                  }}
+                >
+                  サービスを見る
+                </Button>
+              </Link>
+            )}
+            
+            {/* GitHubボタンも同様に変更 */}
+            {project.githubUrl && (
+              <Link
+                href={project.githubUrl}
+                target="_blank" 
+                rel="noopener noreferrer"
+                style={{ textDecoration: 'none' }}
+              >
+                <Button 
+                  variant="outlined"
+                  startIcon={<GitHubIcon />}
+                  sx={{ 
+                    // borderColorをdialogBorderColorに置き換え
+                    borderColor: dialogBorderColor !== 'rgba(255, 255, 255, 0)' ? dialogBorderColor : 'primary.main',
+                    color: dialogBorderColor !== 'rgba(255, 255, 255, 0)' ? dialogBorderColor : 'primary.main',
+                    // 他のスタイルも同様に
+                  }}
+                >
+                  GitHub
+                </Button>
+              </Link>
+            )}
+          </Box>
+
+          {/* プロジェクト詳細情報 */}
+          <Typography variant="h6" gutterBottom sx={{ mt: 1 }}>
+            概要
+          </Typography>
+          
+          <Typography
             variant="body1"
             sx={{
-                whiteSpace: 'pre-wrap',  // または 'pre-line'
-                mb: 2
+              whiteSpace: 'pre-wrap',
+              mb: 3
             }}
-        >
+          >
             {project.detailedDescription}
-        </Typography>
+          </Typography>
+          
+          {/* 技術スタック */}
+          <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
+            使用技術
+          </Typography>
+          
+          <Stack direction="row" spacing={1} flexWrap="wrap" gap={1} sx={{ mb: 3 }}>
+            {project.technologies.map((tech) => (
+              <Chip 
+                key={tech} 
+                label={tech}
+                sx={{ 
+                  borderColor: borderColor !== 'rgba(255, 255, 255, 0)' ? borderColor : undefined,
+                  borderWidth: 1,
+                  borderStyle: 'solid',
+                }}
+              />
+            ))}
+          </Stack>
+          
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>閉じる</Button>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button 
+            onClick={handleClose}
+            sx={{ 
+              color: dialogBorderColor !== 'rgba(255, 255, 255, 0)' ? dialogBorderColor : undefined 
+            }}
+          >
+            閉じる
+          </Button>
         </DialogActions>
       </Dialog>
     </>

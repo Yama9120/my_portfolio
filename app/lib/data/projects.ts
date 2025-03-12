@@ -7,6 +7,7 @@ export type Project = {
     technologies: string[];
     githubUrl?: string;
     serviceUrl?: string;
+    links?: string[];
 };
 
 export const projects: Project[] = [
@@ -26,7 +27,6 @@ export const projects: Project[] = [
         ].join('\n'),
         imageUrl: "images/projects/librarin_top.png",
         technologies: ["node.js", "JavaScript", "EJS", "CSS", "Firebase", "Docker", "Nginx"],
-        githubUrl: "https://github.com/yourusername/todo-app",
         serviceUrl: "https://librarin.tgif.hiroshima-u.ac.jp/"
     },
     {
@@ -41,7 +41,6 @@ export const projects: Project[] = [
         ].join('\n'),
         imageUrl: "images/projects/cafeteria_poster.png",
         technologies: ["Figma", "Next.js", "TypeScript", "Mui", "Go"],
-        githubUrl: "https://github.com/yourusername/todo-app",
         serviceUrl: "https://prd-tgo-i-app.tgif.hiroshima-u.ac.jp/ja/cafeteria/congestion"
     },
     {
@@ -53,9 +52,8 @@ export const projects: Project[] = [
             "主に使用しているツールはIllustrator、Photoshop、Clip Studio Paintです。ここでのスキルは、開発の際のデザインの部分にも活かされています。",
             "ヒアリングと制作を繰り返し、理想の形を作りあげられるように努力しています。",
         ].join('\n'),
-        imageUrl: "https://placehold.co/600x400", // ダミー画像を使用
+        imageUrl: "images/projects/tgif_items.jpg",
         technologies: ["Illustrator", "Photoshop", "Clip Studio Paint", "Blender"],
-        githubUrl: "https://github.com/yourusername/todo-app"
     },
     {
         id: 4,
@@ -67,10 +65,9 @@ export const projects: Project[] = [
             "Githubでmainブランチにpushされた際に自動でデプロイを行うように設定しています。",
             "また、このサイトでは、今までの開発の知識を活かし、効率的な開発を心がけております。具体的には、技術スタックやプロジェクトの詳細を表示するためのコンポーネントを作成し、再利用することで、効率的にコンテンツを追加できるようにしています。"
         ].join('\n'),
-        imageUrl: "https://placehold.co/600x400", // ダミー画像を使用
+        imageUrl: "images/projects/portfolio_site.jpg",
         technologies: ["Figma", "Next.js", "TypeScript", "Mui"],
-        githubUrl: "https://github.com/yourusername/portfolio",
-        serviceUrl: "https://your-portfolio.vercel.app"
+        serviceUrl: "https://my-portfolio-weld-delta-74.vercel.app/"
     },
     {
         id: 5,
@@ -82,10 +79,9 @@ export const projects: Project[] = [
             "このゲームを作成することで、Pythonの基本的な文法や、Pyxelの使い方を学びました。",
             "現在制作途中ですが、完成した際には、販売サイトに登録するつもりです。"
         ].join('\n'),
-        imageUrl: "https://placehold.co/600x400", // ダミー画像を使用
+        imageUrl: "images/projects/chill_title.png",
         technologies: ["Python", "Pyxel", "Clip Studio Paint"],
-        githubUrl: "https://github.com/yourusername/todo-app",
-        serviceUrl: "https://your-portfolio.vercel.app"
+        serviceUrl: "https://yama9120.github.io/pixel_puzzle/"
     },
     {
         id: 6,
@@ -97,9 +93,8 @@ export const projects: Project[] = [
             "この拡張機能を作成することで、Chrome拡張機能の作り方を学びました。",
             "また、この拡張機能を作成することで、不便だと感じる部分を自分で解決することができるということを学びました。"
         ].join('\n'),
-        imageUrl: "https://placehold.co/600x400", // ダミー画像を使用
+        imageUrl: "images/projects/youtube_chat.jpg",
         technologies: ["TypeScript"],
-        githubUrl: "https://github.com/yourusername/todo-app",
-        serviceUrl: "https://your-portfolio.vercel.app"
+        githubUrl: "https://github.com/Yama9120/youtube-chat-popup",
     },
 ];
