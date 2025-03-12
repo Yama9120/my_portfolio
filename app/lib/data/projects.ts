@@ -71,7 +71,7 @@ export const projects: Project[] = [
         ].join('\n'),
         imageUrl: "images/projects/portfolio_site.jpg",
         technologies: ["Figma", "Next.js", "TypeScript", "Mui"],
-        serviceUrl: "https://your-portfolio.vercel.app"
+        serviceUrl: "https://my-portfolio-weld-delta-74.vercel.app/"
     },
     {
         id: 5,
@@ -85,7 +85,7 @@ export const projects: Project[] = [
         ].join('\n'),
         imageUrl: "images/projects/chill_title.png",
         technologies: ["Python", "Pyxel", "Clip Studio Paint"],
-        serviceUrl: "https://your-portfolio.vercel.app"
+        serviceUrl: "https://yama9120.github.io/pixel_puzzle/"
     },
     {
         id: 6,
@@ -99,6 +99,6 @@ export const projects: Project[] = [
         ].join('\n'),
         imageUrl: "images/projects/youtube_chat.jpg",
         technologies: ["TypeScript"],
-        githubUrl: "https://github.com/yourusername/todo-app",
+        githubUrl: "https://github.com/Yama9120/youtube-chat-popup",
     },
 ];
