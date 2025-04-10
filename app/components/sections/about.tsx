@@ -30,7 +30,7 @@ export default function About() {
                         また、個人開発では、このポートフォリオサイトの作成や、ゲーム制作も行っています。
                     </Typography>
                     <Typography variant="body1" paragraph>
-                        趣味はゲーム、プログラミング、Vtuberやストリーマの配信視聴、などです。
+                        趣味はゲーム、プログラミング、Vtuberやストリーマーの配信視聴、などです。
                     </Typography>
                     <Typography variant="body1">
                         常に趣味の分野に対する新しい技術に興味を持ち、手を動かしながら学習を続けています。

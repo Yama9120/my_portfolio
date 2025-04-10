@@ -77,7 +77,7 @@ export const projects: Project[] = [
             "PythonのPyxelを使用して作成したパズル&箱庭ゲームです。",
             "プレイヤーは、パズルゲーム・釣りを行い、植物や魚を育て、育てたものや入手したアイテムを箱庭を自由に作ることができます。",
             "このゲームを作成することで、Pythonの基本的な文法や、Pyxelの使い方を学びました。",
-            "現在制作途中ですが、完成した際には、販売サイトに登録するつもりです。"
+            "現在制作途中ですが、完成した際には、販売サイトに登録したい、という気持ちを持って開発しています。"
         ].join('\n'),
         imageUrl: "images/projects/chill_title.png",
         technologies: ["Python", "Pyxel", "Clip Studio Paint"],
